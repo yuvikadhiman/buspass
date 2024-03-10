@@ -1,0 +1,14 @@
+:root {
+  --primary: #20364B;
+  --primaryBg: rgba(247, 248, 252, 255);
+  --input: rgba(239, 240, 244, 255);
+  --hoverBtn: #F56161;
+  --border: #585858;
+
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Barlow', sans-serif;
+}
