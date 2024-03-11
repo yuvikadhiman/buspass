@@ -28,11 +28,21 @@ export const bookMyPass = async (req, res) => {
 
 export const getMyPass = async (req, res) => {
   try {
-    const passes = await Pass.find({ userId: req.user._id });
+    let user = {
+      _id: req.user._id,
+      name: req.user.name,
+      email: req.user.email,
+      createdAt: req.user.createdAt,
+      updatedAt: req.user.updatedAt,
+      __v: req.user.__v,
+    };
+    const passes = await Pass.find({ userId: user._id });
+
     if (!passes) {
       return res.status(201).json({ msg: `You don't have any pass` });
     }
-    res.json(passes);
+
+    res.json({ user, passes });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: 'Internal Server Error' });

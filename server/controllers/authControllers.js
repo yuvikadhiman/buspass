@@ -1,3 +1,4 @@
+import { v2 as cloudinary } from 'cloudinary';
 import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
 import generateTokenAndSetCookie from '../utils/generateToken.js';
@@ -5,9 +6,12 @@ import generateTokenAndSetCookie from '../utils/generateToken.js';
 export const register = async (req, res) => {
   try {
     const { name, email, password, confirmPassword } = req.body;
+    let { imgUrl } = req.body;
+
     if (password === '') {
       return res.status(400).json({ msg: 'Enter a password' });
     }
+
     if (password !== confirmPassword) {
       return res.status(400).json({ msg: "Passwords don't match" });
     }
@@ -20,10 +24,18 @@ export const register = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    if (imgUrl) {
+      let uploadedResponse = await cloudinary.uploader.upload(imgUrl, {
+        folder: 'whisper',
+      });
+      imgUrl = uploadedResponse.secure_url;
+    }
+    
     const newUser = new User({
       name,
       email,
       password: hashedPassword,
+      photo: imgUrl,
     });
 
     if (newUser) {
