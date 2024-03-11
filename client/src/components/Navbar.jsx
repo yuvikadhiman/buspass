@@ -4,14 +4,16 @@ import { useState } from 'react';
 import logo from '../assets/logo.svg';
 
 const Header = styled.nav`
+   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+   background-color: white;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  /* background-color: #0f172a; */
-  /* color: white; */
+  z-index: 1;
+  overflow: hidden;
   position: sticky;
-  margin: 0 20%;
   top: 0;
+
 `;
 
 const NavImage = styled.img`
@@ -106,6 +108,9 @@ const Navbar = () => {
         </NavItem>
         <NavItem>
           <NavLink to="/contact">Contact</NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink to="/login">Login</NavLink>
         </NavItem>
       </NavList>
     </Header>

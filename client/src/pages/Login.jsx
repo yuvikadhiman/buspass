@@ -1,66 +1,54 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import Loader from '../components/Loader';
-
-const Container = styled.div`
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--primaryBg);
-`;
-
-const Heading = styled.h1`
-  text-align: center;
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-`;
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import Loader from "../components/Loader";
 
 const FormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-width: 24rem;
-  margin: auto;
-  width: 30rem;
-`;
-
-const Form = styled.form`
-  width: 80%;
-  padding: 1.5rem;
-  border-radius: 0.5rem;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   background-color: white;
-  border-radius: 20px;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 60vw;
+  border-radius: 14px;
+`;
+const FormContainerImage = styled.div`
+  img {
+    width: 100%;
+    object-position: center;
+  }
+`;
+const Form = styled.form`
+  display: block;
+  margin: auto;
+  width: 300px;
 `;
 
-// const Label = styled.label`
-//   padding: 0.5rem;
-//   margin-top: 10px;
-//   margin-bottom: 10px;
-// `;
-
-const Input = styled.input`
-  width: 80%;
-  height: 2.5rem;
-  border: 1px solid var(--border-primary);
-  border-radius: 10px;
-  background-color: var(--input);
+const Heading = styled.h3`
+  font-size: 1.5rem;
   margin-bottom: 1rem;
-  padding-left: 5%;
-  padding-right: 15%;
-  margin-top: 15px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  font-weight: 600;
+`;
+const Input = styled.input`
+  width: 100%;
+  height: 1.5rem;
+  border: 1px solid var(--border-primary);
+  background-color: var(--input);
+  border-radius: 4px;
+  margin: 5px 0;
+  padding: 10px 0;
+  &::placeholder {
+    padding-left: 12px;
+  }
 `;
 
 const StyledLink = styled(Link)`
   color: black;
   text-decoration: none;
   font-size: 0.875rem;
-  margin-top: 0.5rem;
   &:hover {
     text-decoration: underline;
   }
@@ -68,42 +56,49 @@ const StyledLink = styled(Link)`
 
 const Button = styled.button`
   width: 100%;
+  margin: 1rem 0;
+  margin-top: 2rem;
   height: 2.5rem;
-  background-color: var(--primary);
-  color: black;
-  border-radius: 10px;
-  border: 0;
-
+  background-color: rgb(221, 20, 50);
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 20px;
   &:hover {
     border: 2px rgb(250, 210, 36);
-    background-color: white;
   }
 `;
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLogin, setisLogin] = useState(true);
   const loading = false;
 
+  console.log(isLogin)
   const handleSubmit = async (e) => {
     e.preventDefault();
     // await login(username, password);
   };
 
   return (
-    <Container>
+    <>
       <FormContainer>
+        <FormContainerImage>
+          <img
+            src="https://img.freepik.com/free-vector/forgot-password-concept-illustration_114360-1010.jpg?w=740&t=st=1710164733~exp=1710165333~hmac=b443c9732e6450fdfe2ef365f41495bc825323b51c929356ffd6817156386af3"
+            alt=""
+          />
+        </FormContainerImage>
         <Form onSubmit={handleSubmit}>
-          <Heading>Login</Heading>
+          
+          <Heading>{isLogin? "Sign in ":"Create your account"}</Heading>
           <div>
             {/* <Label htmlFor="username">Username</Label> */}
             <Input
               id="username"
               type="text"
-              placeholder="Enter your username"
+              placeholder="Enter your full name"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
@@ -118,23 +113,35 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <Button type="submit" disabled={loading}>
-            {loading ? <Loader /> : 'Login'}
+          {!isLogin && (
+             <div>
+             <Input
+               id="confirmPassword"
+               type="password"
+               placeholder="Confirm password"
+
+             />
+           </div>
+          )}
+          <Button type="submit" 
+          disabled={loading}>
+             {isLogin ? "Sign up now" : "Login"}
           </Button>
-          <StyledLink
-            to="/register"
-            style={{
-              fontSize: '0.875rem',
-              color: 'var(--text-message)',
-              marginTop: '0.5rem',
-              display: 'inline-block',
+          
+            <StyledLink
+             onClick={() => setisLogin(!isLogin)}
+             style={{
+              fontSize: "0.875rem",
+              color: "var(--text-message)",
+              marginTop: "0.5rem",
+              display: "inline-block",
             }}
           >
-            {"Don't"} have an account? Register Now
+            {isLogin ? "Don't have an account? Register Now":"Already existing member ? Login"}
           </StyledLink>
         </Form>
       </FormContainer>
-    </Container>
+    </>
   );
 };
 
