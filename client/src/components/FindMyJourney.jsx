@@ -101,7 +101,7 @@ const FindMyJourney = () => {
       />
       <TextContainer>
         <h1>
-          Find next place to <span>Vist</span>
+          Find next place to <span>Visit</span>
         </h1>
         <p>Your traveling satisfaction will be more exciting!</p>
       </TextContainer>

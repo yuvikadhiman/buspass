@@ -3,7 +3,7 @@ import FindMyJourney from '../components/FindMyJourney';
 // import HomepageCards from '../components/LearnMoreCards';
 // import Mountain from '../components/Mountain';
 // import DestinationCard from '../components/DestinationCard';
-// import Footer from '../components/Footer';
+import Footer from '../components/Footer';
 
 const Homepage = () => {
   return (
@@ -13,7 +13,7 @@ const Homepage = () => {
       {/* <HomepageCards /> */}
       {/* <Mountain /> */}
       {/* <DestinationCard /> */}
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 };

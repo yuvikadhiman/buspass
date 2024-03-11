@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use('/api', authRouter);
-app.use('/protected', passRouter);
+app.use('/api/user', passRouter);
 app.use('/admin', adminRouter);
 
 app.listen(PORT, async () => {

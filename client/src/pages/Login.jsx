@@ -1,7 +1,12 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import Loader from "../components/Loader";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import Loader from '../components/Loader';
+import { toast } from 'react-toastify';
+import { useAuthContext } from '../context/AuthContext';
+
+const imgUrl =
+  'https://img.freepik.com/free-vector/forgot-password-concept-illustration_114360-1010.jpg?w=740&t=st=1710164733~exp=1710165333~hmac=b443c9732e6450fdfe2ef365f41495bc825323b51c929356ffd6817156386af3';
 
 const FormContainer = styled.div`
   position: absolute;
@@ -33,16 +38,13 @@ const Heading = styled.h3`
   font-weight: 600;
 `;
 const Input = styled.input`
-  width: 100%;
+  width: 90%;
   height: 1.5rem;
   border: 1px solid var(--border-primary);
   background-color: var(--input);
   border-radius: 4px;
   margin: 5px 0;
-  padding: 10px 0;
-  &::placeholder {
-    padding-left: 12px;
-  }
+  padding: 10px 5%;
 `;
 
 const StyledLink = styled(Link)`
@@ -70,74 +72,185 @@ const Button = styled.button`
 `;
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLogin, setisLogin] = useState(true);
-  const loading = false;
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLogin, setIsLogin] = useState(true);
 
-  console.log(isLogin)
+  const [loading, setLoading] = useState(false);
+
+  const [registerInputs, setRegisterInputs] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+
+  const { setAuthUser } = useAuthContext();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // await login(username, password);
+    if (isLogin) {
+      if (!email || !password) {
+        toast.error('Please enter all the values');
+        return;
+      }
+      setLoading(true);
+      try {
+        console.log('trying to login');
+        const res = await fetch(`/api/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+        const data = await res.json();
+        console.log(data);
+        if (data.error) {
+          throw new Error(data.error);
+        }
+
+        localStorage.setItem('buspass', JSON.stringify(data));
+
+        setAuthUser(data);
+        toast.success(data.msg);
+      } catch (error) {
+        toast.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      if (
+        !registerInputs.name ||
+        !registerInputs.email ||
+        !registerInputs.password ||
+        !registerInputs.confirmPassword
+      ) {
+        toast.error('Please enter all values');
+        return;
+      }
+      if (registerInputs.password !== registerInputs.confirmPassword) {
+        toast.error('Passwords do not match');
+        return;
+      }
+      // if (password.length < 6) {
+      //   toast.error('Password must be greater than 6');
+      //   return;
+      // }
+
+      setLoading(true);
+      try {
+        toast.success('register');
+        const res = await fetch(`/api/register`, {
+          method: 'post',
+          headers: { 'Content-type': 'application/json' },
+          body: JSON.stringify({
+            name: registerInputs.name,
+            email: registerInputs.email,
+            password: registerInputs.password,
+            confirmPassword: registerInputs.confirmPassword,
+          }),
+        });
+
+        const data = await res.json();
+        console.log(data);
+        if (data.error) {
+          throw new Error(data.error);
+        }
+
+        localStorage.setItem('buspass', JSON.stringify(data));
+        toast.success(data.msg);
+        setAuthUser(data);
+      } catch (error) {
+        toast.error(error.message);
+      }
+      setLoading(false);
+    }
   };
 
   return (
     <>
       <FormContainer>
         <FormContainerImage>
-          <img
-            src="https://img.freepik.com/free-vector/forgot-password-concept-illustration_114360-1010.jpg?w=740&t=st=1710164733~exp=1710165333~hmac=b443c9732e6450fdfe2ef365f41495bc825323b51c929356ffd6817156386af3"
-            alt=""
-          />
+          <img src={imgUrl} alt="" />
         </FormContainerImage>
         <Form onSubmit={handleSubmit}>
-          
-          <Heading>{isLogin? "Sign in ":"Create your account"}</Heading>
+          <Heading>{isLogin ? 'Sign in ' : 'Create your account'}</Heading>
+          {!isLogin && (
+            <div>
+              <Input
+                id="name"
+                type="text"
+                placeholder="Enter your name"
+                value={registerInputs.name}
+                onChange={(e) =>
+                  setRegisterInputs({
+                    ...registerInputs,
+                    name: e.target.value,
+                  })
+                }
+              />
+            </div>
+          )}
           <div>
-            {/* <Label htmlFor="username">Username</Label> */}
             <Input
-              id="username"
-              type="text"
-              placeholder="Enter your full name"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              id="email"
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setRegisterInputs({
+                  ...registerInputs,
+                  email: e.target.value,
+                });
+              }}
             />
           </div>
           <div>
-            {/* <Label htmlFor="password">Password</Label> */}
             <Input
               id="password"
               type="password"
               placeholder="Enter your password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setRegisterInputs({
+                  ...registerInputs,
+                  password: e.target.value,
+                });
+              }}
             />
           </div>
           {!isLogin && (
-             <div>
-             <Input
-               id="confirmPassword"
-               type="password"
-               placeholder="Confirm password"
-
-             />
-           </div>
+            <div>
+              <Input
+                id="confirmPassword"
+                type="password"
+                placeholder="Confirm password"
+                value={registerInputs.confirmPassword}
+                onChange={(e) =>
+                  setRegisterInputs({
+                    ...registerInputs,
+                    confirmPassword: e.target.value,
+                  })
+                }
+              />
+            </div>
           )}
-          <Button type="submit" 
-          disabled={loading}>
-             {isLogin ? "Sign up now" : "Login"}
+          <Button type="submit" disabled={loading} onClick={handleSubmit}>
+            {loading ? <Loader /> : isLogin ? 'Login' : 'Register'}
           </Button>
-          
-            <StyledLink
-             onClick={() => setisLogin(!isLogin)}
-             style={{
-              fontSize: "0.875rem",
-              color: "var(--text-message)",
-              marginTop: "0.5rem",
-              display: "inline-block",
+          <StyledLink
+            onClick={() => setIsLogin(!isLogin)}
+            style={{
+              fontSize: '0.875rem',
+              color: 'var(--text-message)',
+              marginTop: '0.5rem',
+              display: 'inline-block',
             }}
           >
-            {isLogin ? "Don't have an account? Register Now":"Already existing member ? Login"}
+            {isLogin
+              ? "Don't have an account? Register Now"
+              : 'Already existing member ? Login'}
           </StyledLink>
         </Form>
       </FormContainer>

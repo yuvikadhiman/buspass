@@ -2,10 +2,8 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  background-color: #3d3d3d;
-  margin: 20px 5%;
+  background-color: black;
   height: 100px;
-  border-radius: 20px;
   @media (max-width: 720px) {
     height: 150px;
   }
@@ -35,9 +33,9 @@ const Footer = () => {
   return (
     <Wrapper>
       <FooterContent>
-        <Contents to="/">About Us</Contents>
-        <Contents to="/">Careers</Contents>
-        <Contents to="/">Copyright 2024</Contents>
+        <Contents to="/">Get a Pass</Contents>
+        {/* <Contents to="/">Careers</Contents> */}
+        <Contents to="/">© 2024 Bus Pass</Contents>
       </FooterContent>
     </Wrapper>
   );

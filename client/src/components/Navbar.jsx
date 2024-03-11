@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import logo from '../assets/logo.svg';
 
 const Header = styled.nav`
    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2);
