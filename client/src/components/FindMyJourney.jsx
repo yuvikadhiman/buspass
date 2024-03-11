@@ -1,200 +1,125 @@
-import styled from 'styled-components';
+import styled from "styled-components";
+import DestinationCard from "./DestinationCard";
 // import homepageBus from '../assets/HeroImage.png';
 
-const Wrapper = styled.div`
-  background-image: url("https://imgak.mmtcdn.com/pwa_v3/pwa_commons_assets/desktop/bg7.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  height :50vh;
-  position: relative;
-  /* display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  background-color: white;
-  overflow: hidden;
-  margin: 0 10%;
-  border-radius: 40px;
-  justify-content: space-between; */
-  /* @media screen and (max-width: 1000px) {
-    margin: 0 7%;
-  }
-  @media screen and (max-width: 800px) {
-    flex-direction: column;
-  }
-  @media screen and (max-width: 700px) {
-    margin: 0 5%;
-  } */
+const Wrapper = styled.div``;
+const Banner = styled.img`
+  width: 100%;
+  height: 50vh;
+  object-fit: cover;
+  object-position: center;
+  filter: brightness(40%);
 `;
-
-// const TextContainer = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: center;
-//   margin-left: 7rem;
-//   color: white;
-//   margin-top: 10rem;
-//   @media screen and (max-width: 1300px) {
-//     margin-left: 10%;
-//   }
-//   @media screen and (max-width: 1200px) {
-//     margin-right: 5%;
-//   }
-// `;
-
-// const Heading = styled.h1`
-//   font-size: 45px;
-//   @media screen and (max-width: 800px) {
-//     font-size: 30px;
-//   }
-// `;
-
-// const SubHeading = styled.p`
-//   font-size: 15px;
-// `;
-
-// const JourneyCard = styled.div`
-//   background-color: rgba(0, 0, 0, 0.5);
-//   backdrop-filter: blur(5px);
-//   -webkit-backdrop-filter: blur(10px);
-//   padding: 10px;
-//   min-width: 200px;
-//   width: 400px;
-//   border-radius: 30px;
-//   margin: auto;
-//   text-align: center;
-//   margin-left: 20%;
-//   @media (min-width: 1300px) and (max-width: 1500px) {
-//     margin-left: 15%;
-//   }
-//   @media screen and (max-width: 1300px) {
-//     margin-left: 10%;
-//   }
-//   @media screen and (max-width: 1200px) {
-//     margin-right: 5%;
-//   }
-//   @media screen and (max-width: 800px) {
-//     font-size: 30px;
-//   }
-//   @media screen and (max-width: 500px) {
-//     width: 80%;
-//     margin-right: 0;
-//     margin-left: 0;
-//   }
-// `;
-
-// const JourneyCardTitle = styled.h2`
-//   font-size: 1.25rem;
-//   color: white;
-//   margin-top: 1rem;
-// `;
-
-// const JourneyCardDescription = styled.p`
-//   font-size: 0.875rem; /* Adjust font size as needed */
-//   color: white;
-//   margin-top: 0.5rem;
-// `;
-const Journey=styled.div`
+const TextContainer = styled.div`
   position: absolute;
-  width: 620px;
+  top: 30%;
   left: 50%;
-  top: 50%;
-  transform: translate(-50%,-50%);
-  background-color: #ffffff;
-  padding: 40px 30px;
-  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-
-
+  transform: translate(-50%, -50%);
+  h1 {
+    color: white;
+    font-size: 3.5rem;
+    font-weight: 700;
+    text-transform: capitalize;
+    margin-bottom: 4px;
+    span {
+      color: rgb(221, 20, 50);
+    }
+  }
+  p {
+    text-align: center;
+    color: white;
+    font-size: 1.2rem;
+  }
 `;
 const JourneyForm = styled.form`
-  display: flex;
-  /* gap: 0.5rem; */
-  /* border: 1px solid grey; */
-  /* padding: 1rem; */
-  border-radius: 8px;
-
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  padding: 40px 30px;
+  width: 780px;
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
 `;
-
 const JourneyInput = styled.input`
   width: 35%;
   height: 2.5rem;
   border: 0.1px solid gainsboro;
-  /* border: 1px solid var(--border-primary); */
   padding-left: 10px;
+  border-radius: 4px;
   &:focus {
     outline: none;
   }
-  &:hover{
-    background-color: aliceblue;
+  &:hover {
+    background-color: rgba(255, 196, 201, 0.318);
   }
- /* border: 1px solid var(--border-primary); */
-  /* width: 80%;
-  height: 2.5rem;
-  border: 1px solid var(--border-primary);
-  border-radius: 50px;
-  background-color: var(--input);
-  margin-bottom: 1rem;
-  padding-left: 5%;
-  padding-right: 15%;
-  padding-top: 5px;
-
-
-  padding-bottom: 5px; */
-
-
 `;
 
 const JourneyButton = styled.button`
-border: none;
-cursor: pointer;
-width: 170px;
-color: white;
-background-color: #2C99F0;
-border-radius: 4px;
-margin-left: 0.5rem;
-  /* background-color: var(--primary);
-  color: black;
-  padding: 1rem 1rem;
   border: none;
-  border-radius: 50px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-  } */
+  width: 170px;
+  color: white;
+  background-color: rgb(221, 20, 50);
+  border-radius: 4px;
+  margin-left: 0.5rem;
+  padding: 14px;
+`;
+const JourneyCard = styled.div`
+  display: block;
+  margin: 5rem auto;
+  width: 840px;
 `;
 
+const JourneyCardDescription = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background-color: #ffffff;
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
+  padding: 16px 20px;
+  color: #676f82;
+  border-radius: 6px;
+`;
+const JourneyCardTitle = styled.div`
+  text-transform: capitalize;
+  font-size: 16px;
+`;
+const JourneyCardDetails = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  color: #676f82;
+  gap: 1rem;
+`;
 const FindMyJourney = () => {
   return (
     <Wrapper>
-      <Journey>
+      <Banner
+        src="https://www.protolabs.com/media/xikbed3z/buses-parked.jpg"
+        alt=""
+      />
+      <TextContainer>
+        <h1>
+          Find next place to <span>Vist</span>
+        </h1>
+        <p>Your traveling satisfaction will be more exciting!</p>
+      </TextContainer>
       <JourneyForm action="">
-          <JourneyInput type="text" placeholder="From" />
-          <JourneyInput type="text" placeholder="To" />
-          <JourneyButton type="submit">Find My Journey</JourneyButton>
-        </JourneyForm>
-      </Journey>
-      {/* <TextContainer>
-        <Heading>
-          Travel Well & <br /> Easily With Us
-        </Heading>
-        <SubHeading>
-          Your traveling satisfaction will be more exciting!
-        </SubHeading>
-      </TextContainer> */}
-      {/* <JourneyCard>
-        <JourneyCardTitle>Choose Your Journey</JourneyCardTitle>
+        <JourneyInput type="text" placeholder="From" />
+        <JourneyInput type="text" placeholder="To" />
+        <JourneyButton type="submit">Find My Journey</JourneyButton>
+      </JourneyForm>
+      <JourneyCard>
         <JourneyCardDescription>
-          isse velit iaculis duis neassa quam iaculis condimentum eu
+          <JourneyCardTitle>Service Provider</JourneyCardTitle>
+          <JourneyCardDetails>
+            <p>Dep Time</p>
+            <p>Arr time</p>
+            <p>Fare</p>
+          </JourneyCardDetails>
         </JourneyCardDescription>
-        <JourneyForm action="">
-          <JourneyInput type="text" placeholder="From" />
-          <JourneyInput type="text" placeholder="To" />
-          <JourneyButton type="submit">Find My Journey</JourneyButton>
-        </JourneyForm>
-      </JourneyCard> */}
+        <DestinationCard />
+      </JourneyCard>
     </Wrapper>
   );
 };

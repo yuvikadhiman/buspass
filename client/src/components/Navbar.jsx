@@ -90,7 +90,7 @@ const Navbar = () => {
   return (
     <Header>
       <NavLogo to="/">
-        <NavImage src={logo} />
+        <NavImage src={""} />
       </NavLogo>
       <Hamburger onClick={() => setMenuOpen(!menuOpen)}>
         <HamburgerLines />
