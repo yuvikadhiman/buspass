@@ -43,6 +43,7 @@ const JourneyForm = styled.form`
   border-radius: 6px;
 `;
 const JourneyInput = styled.input`
+margin: 0 8px;
   width: 35%;
   height: 2.5rem;
   border: 0.1px solid gainsboro;
@@ -64,7 +65,7 @@ const JourneyButton = styled.button`
   background-color: rgb(221, 20, 50);
   border-radius: 4px;
   margin-left: 0.5rem;
-  padding: 14px;
+  padding: 12px;
 `;
 const JourneyCard = styled.div`
   display: block;
