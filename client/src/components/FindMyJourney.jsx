@@ -38,7 +38,7 @@ const JourneyForm = styled.form`
   transform: translate(-50%, -50%);
   background-color: #ffffff;
   padding: 40px 30px;
-  width: 760px;
+  width: 780px;
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
   border-radius: 6px;
 `;
@@ -69,7 +69,7 @@ const JourneyButton = styled.button`
 const JourneyCard = styled.div`
   display: block;
   margin: 5rem auto;
-  width: 820px;
+  width: 840px;
 `;
 
 const JourneyCardDescription = styled.div`
