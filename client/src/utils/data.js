@@ -1,36 +1,40 @@
 export const buses = [
   {
-      name: "Himachal Express",
-      route: "Shimla to Manali",
-      boardingPoint: "Shimla Bus Stand",
-      arrivalTime: "12:00 PM",
-      departureTime: "9:00 AM",
-      price: "500 INR"
+    id: 1,
+    name: 'Himachal Express',
+    route: 'Shimla to Manali',
+    boardingPoint: 'Shimla Bus Stand',
+    arrivalTime: '12:00 PM',
+    departureTime: '9:00 AM',
+    price: '500 INR',
   },
   {
-      name: "Himalayan Queen",
-      route: "Shimla to Dharamshala",
-      boardingPoint: "Ridge, Shimla",
-      arrivalTime: "3:30 PM",
-      departureTime: "12:00 PM",
-      price: "600 INR"
+    id: 2,
+    name: 'Himalayan Queen',
+    route: 'Shimla to Dharamshala',
+    boardingPoint: 'Ridge, Shimla',
+    arrivalTime: '3:30 PM',
+    departureTime: '12:00 PM',
+    price: '600 INR',
   },
   {
-      name: "Shivalik Deluxe",
-      route: "Shimla to Chandigarh",
-      boardingPoint: "Victory Tunnel, Shimla",
-      arrivalTime: "5:30 PM",
-      departureTime: "3:00 PM",
-      price: "400 INR"
+    id: 3,
+    name: 'Shivalik Deluxe',
+    route: 'Shimla to Chandigarh',
+    boardingPoint: 'Victory Tunnel, Shimla',
+    arrivalTime: '5:30 PM',
+    departureTime: '3:00 PM',
+    price: '400 INR',
   },
   {
-      name: "HRTC Volvo",
-      route: "Shimla to Delhi",
-      boardingPoint: "Tutikandi, Shimla",
-      arrivalTime: "8:00 PM",
-      departureTime: "4:00 PM",
-      price: "1000 INR"
-  }
+    id: 4,
+    name: 'HRTC Volvo',
+    route: 'Shimla to Delhi',
+    boardingPoint: 'Tutikandi, Shimla',
+    arrivalTime: '8:00 PM',
+    departureTime: '4:00 PM',
+    price: '1000 INR',
+  },
 ];
 
 export const travelData = [

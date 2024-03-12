@@ -1,18 +1,21 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { useAppContext } from '../context/AppContext';
+import Loader from './Loader';
+import Logo from '../assets/logo.png';
 
 const Header = styled.nav`
-   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2);
-   background-color: white;
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+  padding: 0 5%;
+  background-color: white;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   z-index: 1;
   overflow: hidden;
   position: sticky;
   top: 0;
-
 `;
 
 const NavImage = styled.img`
@@ -87,11 +90,13 @@ const NavLink = styled(Link)`
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { authUser, logoutUser, loading } = useAppContext();
+  console.log(authUser);
 
   return (
     <Header>
       <NavLogo to="/">
-        <NavImage src={""} />
+        <NavImage src={Logo} />
       </NavLogo>
       <Hamburger onClick={() => setMenuOpen(!menuOpen)}>
         <HamburgerLines />
@@ -100,7 +105,11 @@ const Navbar = () => {
       </Hamburger>
       <NavList isOpen={menuOpen}>
         <NavItem>
-          <NavLink to="/about">About</NavLink>
+          {authUser ? (
+            <NavLink to="/dashboard">{`Hello, ${authUser?.userDetails?.name}`}</NavLink>
+          ) : (
+            <NavLink to="/about">About</NavLink>
+          )}
         </NavItem>
         <NavItem>
           <NavLink to="/services">Services</NavLink>
@@ -109,7 +118,17 @@ const Navbar = () => {
           <NavLink to="/contact">Contact</NavLink>
         </NavItem>
         <NavItem>
-          <NavLink to="/login">Login</NavLink>
+          {authUser ? (
+            loading ? (
+              <Loader />
+            ) : (
+              <NavLink onClick={logoutUser} to="/">
+                Logout
+              </NavLink>
+            )
+          ) : (
+            <NavLink to="/auth">Login</NavLink>
+          )}
         </NavItem>
       </NavList>
     </Header>

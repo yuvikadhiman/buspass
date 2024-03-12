@@ -4,6 +4,6 @@ import { checkPass } from '../controllers/adminControllers.js';
 
 const router = express.Router();
 
-router.post('/check', adminProtect, checkPass);
+router.get('/check', adminProtect, checkPass);
 
 export default router;

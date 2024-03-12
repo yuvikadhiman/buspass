@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Loader from '../components/Loader';
 import { toast } from 'react-toastify';
-import { useAuthContext } from '../context/AuthContext';
+import { useAppContext } from '../context/AppContext';
 
 const imgUrl =
   'https://img.freepik.com/free-vector/forgot-password-concept-illustration_114360-1010.jpg?w=740&t=st=1710164733~exp=1710165333~hmac=b443c9732e6450fdfe2ef365f41495bc825323b51c929356ffd6817156386af3';
@@ -71,7 +71,7 @@ const Button = styled.button`
   }
 `;
 
-const Login = () => {
+const Auth = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLogin, setIsLogin] = useState(true);
@@ -85,7 +85,7 @@ const Login = () => {
     confirmPassword: '',
   });
 
-  const { setAuthUser } = useAuthContext();
+  const { setAuthUser } = useAppContext();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -258,4 +258,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Auth;

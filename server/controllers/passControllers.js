@@ -22,7 +22,7 @@ export const bookMyPass = async (req, res) => {
       pass: newPass,
     });
   } catch (error) {
-    res.status(500).json({ msg: 'Internal Server Error' });
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
@@ -45,6 +45,6 @@ export const getMyPass = async (req, res) => {
     res.json({ user, passes });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ msg: 'Internal Server Error' });
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };

@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import { travelData } from "../utils/data";
-import { buses } from "../utils/data";
+import styled from 'styled-components';
+import { buses } from '../utils/data';
+
 const CardContainer = styled.div`
   margin-top: 10px;
   background-color: #ffffff;
@@ -11,7 +11,6 @@ const CardContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
-
 `;
 const ServiceProvider = styled.div`
   p:nth-child(1) {
@@ -50,7 +49,7 @@ const DestinationCard = () => {
       <>
         {buses.map((item) => {
           return (
-            <CardContainer>
+            <CardContainer key={item?.id}>
               <ServiceProvider>
                 <p>{item?.name}</p>
                 <p>

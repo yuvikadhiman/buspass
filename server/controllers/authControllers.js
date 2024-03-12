@@ -9,16 +9,16 @@ export const register = async (req, res) => {
     let { imgUrl } = req.body;
 
     if (password === '') {
-      return res.status(400).json({ msg: 'Enter a password' });
+      return res.status(400).json({ error: 'Enter a password' });
     }
 
     if (password !== confirmPassword) {
-      return res.status(400).json({ msg: "Passwords don't match" });
+      return res.status(400).json({ error: "Passwords don't match" });
     }
 
     const user = await User.findOne({ email });
     if (user) {
-      return res.status(400).json({ msg: 'Email already exist' });
+      return res.status(400).json({ error: 'Email already exist' });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -30,7 +30,7 @@ export const register = async (req, res) => {
       });
       imgUrl = uploadedResponse.secure_url;
     }
-    
+
     const newUser = new User({
       name,
       email,
@@ -43,10 +43,10 @@ export const register = async (req, res) => {
       await newUser.save();
       res.status(201).json({ msg: 'Account created successfully' });
     } else {
-      return res.status(400).json({ msg: 'Invalid user data' });
+      return res.status(400).json({ error: 'Invalid user data' });
     }
   } catch (error) {
-    res.status(500).json({ msg: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -61,16 +61,23 @@ export const login = async (req, res) => {
     );
 
     if (!user || !isPasswordCorrect) {
-      return res.json({ msg: 'Invalid credentials' });
+      return res.status(401).json({ error: 'Invalid credentials' });
     }
 
     generateTokenAndSetCookie(user._id, res);
 
+    let userDetails = user;
+    userDetails = userDetails.toObject();
+    if (user.role != 'admin') {
+      delete userDetails.role;
+    }
+
     return res.status(200).json({
       msg: 'User Logged in Successful',
+      userDetails,
     });
   } catch (error) {
-    res.status(500).json({ msg: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -79,6 +86,6 @@ export const logout = async (req, res) => {
     res.cookie('jwt', '', { maxAge: 0 });
     res.status(200).json({ msg: 'Logged out successfully' });
   } catch (error) {
-    res.status(500).json({ msg: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
