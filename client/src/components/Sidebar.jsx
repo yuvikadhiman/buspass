@@ -3,28 +3,31 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
   display: block;
-  box-shadow: 1px 0px 0px 0px rgba(0, 0, 0, 0.1);
 `;
 
 const SidebarContainer = styled.div`
-  background:white;
+  background: white;
   min-height: 100vh;
   height: 100%;
   width: 250px;
   display: flex;
   flex-direction: column;
-  gap: 30px;
-  padding-top: 50px;
   align-items: center;
 `;
 
 const SidebarItem = styled(Link)`
-  font-size: 40px;
+  margin-top: 20px;
+  padding: 10px 20px;
+  border-radius: 15px;
+  font-size: 30px;
   text-decoration: none;
   color: black;
   font-weight: 600;
   &:hover {
     cursor: pointer;
+    background-color: antiquewhite;
+    padding: 10px 20px;
+    border-radius: 15px;
   }
 `;
 
@@ -32,10 +35,8 @@ const Sidebar = () => {
   return (
     <Wrapper>
       <SidebarContainer>
-        <SidebarItem>Hello</SidebarItem>
-        <SidebarItem>Hello</SidebarItem>
-        <SidebarItem>Hello</SidebarItem>
-        <SidebarItem>Hello</SidebarItem>
+        <SidebarItem to="">My Pass</SidebarItem>
+        <SidebarItem to="buy-pass">Buy a Pass</SidebarItem>
       </SidebarContainer>
     </Wrapper>
   );

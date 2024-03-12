@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useAppContext } from '../context/AppContext';
-import Loader from './Loader';
+import { Loader } from './';
 import Logo from '../assets/logo.png';
 
 const Header = styled.nav`
@@ -104,7 +104,6 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { authUser, logoutUser, loading } = useAppContext();
   console.log(authUser);
-
   return (
     <Header>
       <NavLogo to="/">

@@ -9,7 +9,7 @@ const spin = keyframes`
   }
 `;
 
-const Loader = styled.div`
+const LoaderComponent = styled.div`
   width: 20px;
   height: 20px;
   border-radius: 50%;
@@ -18,5 +18,9 @@ const Loader = styled.div`
   animation: ${spin} 1s linear infinite;
   margin: 0 auto;
 `;
+
+const Loader = () => {
+  return <LoaderComponent />;
+};
 
 export default Loader;

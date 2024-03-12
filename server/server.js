@@ -7,6 +7,7 @@ import connectDB from './database/connectDB.js';
 import authRouter from './routes/authRoutes.js';
 import passRouter from './routes/passRoutes.js';
 import adminRouter from './routes/adminRoutes.js';
+import busRouter from './routes/busRoutes.js';
 
 dotenv.config({ path: '../.env' });
 
@@ -26,6 +27,7 @@ app.use(cookieParser());
 app.use('/api', authRouter);
 app.use('/api/user', passRouter);
 app.use('/admin', adminRouter);
+app.use('/api', busRouter);
 
 app.listen(PORT, async () => {
   await connectDB();

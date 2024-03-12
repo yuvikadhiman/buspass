@@ -1,7 +1,7 @@
-import { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useRef, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import Loader from '../components/Loader';
+import { Loader } from '../components';
 import { toast } from 'react-toastify';
 import { useAppContext } from '../context/AppContext';
 
@@ -84,9 +84,10 @@ const ImageChoose = styled.div`
 `;
 
 const Auth = () => {
+  const [isLogin, setIsLogin] = useState(true);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLogin, setIsLogin] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const [registerInputs, setRegisterInputs] = useState({
@@ -98,7 +99,15 @@ const Auth = () => {
 
   const imageRef = useRef(null);
 
-  const { setAuthUser, usePreviewImage } = useAppContext();
+  const { setAuthUser, usePreviewImage, authUser } = useAppContext();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (authUser) {
+      setTimeout(() => navigate('/dashboard'), 500);
+    }
+  }, [authUser, navigate]);
 
   let { handleImageChange, profileUrl, setProfileUrl, selectedFile } =
     usePreviewImage();

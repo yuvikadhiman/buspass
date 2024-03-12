@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
   background-color: black;
-  height: 100px;
+  height: 80px;
   @media (max-width: 720px) {
     height: 150px;
   }
