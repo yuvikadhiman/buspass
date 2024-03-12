@@ -39,13 +39,22 @@ export const register = async (req, res) => {
     });
 
     if (newUser) {
+      let userDetails = newUser;
+      userDetails = userDetails.toObject();
+      if (userDetails.role != 'admin') {
+        delete userDetails.role;
+      }
+
       generateTokenAndSetCookie(newUser._id, res);
       await newUser.save();
-      res.status(201).json({ msg: 'Account created successfully' });
+      res
+        .status(201)
+        .json({ msg: 'Account created successfully', userDetails });
     } else {
       return res.status(400).json({ error: 'Invalid user data' });
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };

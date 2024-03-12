@@ -88,6 +88,18 @@ const NavLink = styled(Link)`
   }
 `;
 
+const UserProfile = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const ProfileImage = styled.img`
+  width: 20px;
+  height: 20px;
+  border-radius: 50px;
+  object-fit: contain;
+`;
+
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { authUser, logoutUser, loading } = useAppContext();
@@ -104,9 +116,17 @@ const Navbar = () => {
         <HamburgerLines />
       </Hamburger>
       <NavList isOpen={menuOpen}>
+        {/* <NavItem>
+          {authUser && <ProfileImage src={authUser?.userDetails?.photo} />}
+        </NavItem> */}
         <NavItem>
           {authUser ? (
-            <NavLink to="/dashboard">{`Hello, ${authUser?.userDetails?.name}`}</NavLink>
+            <NavLink to="/dashboard">
+              <UserProfile>
+                <ProfileImage src={authUser?.userDetails?.photo} />
+                {`Hello, ${authUser?.userDetails?.name}`}
+              </UserProfile>
+            </NavLink>
           ) : (
             <NavLink to="/about">About</NavLink>
           )}

@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
+import { v2 as cloudinary } from 'cloudinary';
 
 import connectDB from './database/connectDB.js';
 import authRouter from './routes/authRoutes.js';
@@ -12,7 +13,13 @@ dotenv.config({ path: '../.env' });
 const PORT = process.env.PORT || 3001;
 const app = express();
 
-app.use(express.json({ limit: '50mb' }));
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
+
+app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 

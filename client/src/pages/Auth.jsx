@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Loader from '../components/Loader';
@@ -71,11 +71,22 @@ const Button = styled.button`
   }
 `;
 
+const ImageChoose = styled.div`
+  cursor: pointer;
+  height: 1.5rem;
+  border: 1px solid var(--border-primary);
+  background-color: var(--input);
+  border-radius: 4px;
+  margin: 5px 0;
+  padding: 10px 5%;
+  color: grey;
+  font-size: 14px;
+`;
+
 const Auth = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLogin, setIsLogin] = useState(true);
-
+  const [isLogin, setIsLogin] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const [registerInputs, setRegisterInputs] = useState({
@@ -85,7 +96,12 @@ const Auth = () => {
     confirmPassword: '',
   });
 
-  const { setAuthUser } = useAppContext();
+  const imageRef = useRef(null);
+
+  const { setAuthUser, usePreviewImage } = useAppContext();
+
+  let { handleImageChange, profileUrl, setProfileUrl, selectedFile } =
+    usePreviewImage();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -122,7 +138,8 @@ const Auth = () => {
         !registerInputs.name ||
         !registerInputs.email ||
         !registerInputs.password ||
-        !registerInputs.confirmPassword
+        !registerInputs.confirmPassword ||
+        !profileUrl
       ) {
         toast.error('Please enter all values');
         return;
@@ -138,7 +155,6 @@ const Auth = () => {
 
       setLoading(true);
       try {
-        toast.success('register');
         const res = await fetch(`/api/register`, {
           method: 'post',
           headers: { 'Content-type': 'application/json' },
@@ -147,6 +163,7 @@ const Auth = () => {
             email: registerInputs.email,
             password: registerInputs.password,
             confirmPassword: registerInputs.confirmPassword,
+            imgUrl: profileUrl,
           }),
         });
 
@@ -156,6 +173,7 @@ const Auth = () => {
           throw new Error(data.error);
         }
 
+        setProfileUrl('');
         localStorage.setItem('buspass', JSON.stringify(data));
         toast.success(data.msg);
         setAuthUser(data);
@@ -235,6 +253,17 @@ const Auth = () => {
                 }
               />
             </div>
+          )}
+          {!isLogin && (
+            <ImageChoose onClick={() => imageRef.current.click()}>
+              {selectedFile ? selectedFile.name : `Choose your pass image`}
+              <input
+                type="file"
+                hidden
+                ref={imageRef}
+                onChange={handleImageChange}
+              />
+            </ImageChoose>
           )}
           <Button type="submit" disabled={loading} onClick={handleSubmit}>
             {loading ? <Loader /> : isLogin ? 'Login' : 'Register'}
