@@ -1,6 +1,6 @@
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   Homepage,
   Auth,
@@ -8,40 +8,40 @@ import {
   HomeLayout,
   Error,
   MyPass,
-} from './pages';
-import BuyPass from './pages/BuyPass';
+} from "./pages";
+import BuyPass from "./pages/BuyPass";
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <HomeLayout />,
     children: [
       {
         index: true,
         element: <Homepage />,
       },
+    ],
+  },
+  {
+    path: "dashboard",
+    element: <DashboardLayout />,
+    children: [
       {
-        path: 'dashboard',
-        element: <DashboardLayout />,
-        children: [
-          {
-            index: true,
-            element: <MyPass />,
-          },
-          {
-            path: 'buy-pass',
-            element: <BuyPass />,
-          },
-        ],
+        index: true,
+        element: <MyPass />,
+      },
+      {
+        path: "buy-pass",
+        element: <BuyPass />,
       },
     ],
   },
   {
-    path: '/auth',
+    path: "/auth",
     element: <Auth />,
   },
   {
-    path: 'error',
+    path: "error",
     element: <Error />,
   },
 ]);
