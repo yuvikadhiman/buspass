@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { buses } from '../utils/data';
+import styled from "styled-components";
+import { buses } from "../utils/data";
 
 const CardContainer = styled.div`
   margin-top: 10px;
@@ -46,33 +46,31 @@ const ServiceProviderDetails = styled.div`
 const DestinationCard = () => {
   return (
     <>
-      <>
-        {buses.map((item) => {
-          return (
-            <CardContainer key={item?.id}>
-              <ServiceProvider>
-                <p>{item?.name}</p>
-                <p>
-                  <span>Route : </span>
-                  {item?.route}
-                </p>
-                <p>
-                  <span>Boarding Point : </span>
-                  {item?.boardingPoint}
-                </p>
-              </ServiceProvider>
-              <ServiceProviderDetails>
-                <p>{item?.departureTime}</p>
-                <p>{item?.arrivalTime}</p>
-                <p>
-                  {item?.price}
-                  <button>Book my pass</button>
-                </p>
-              </ServiceProviderDetails>
-            </CardContainer>
-          );
-        })}
-      </>
+      {buses.map((item) => {
+        return (
+          <CardContainer key={item?.id}>
+            <ServiceProvider>
+              <p>{item?.name}</p>
+              <p>
+                <span>Route : </span>
+                {`${item?.from} to ${item?.to}`}
+              </p>
+              <p>
+                <span>Boarding Point : </span>
+                {item?.boardingPoint}
+              </p>
+            </ServiceProvider>
+            <ServiceProviderDetails>
+              <p>{item?.departureTime}</p>
+              <p>{item?.arrivalTime}</p>
+              <p>
+                {item?.price}
+                <button>Book my pass</button>
+              </p>
+            </ServiceProviderDetails>
+          </CardContainer>
+        );
+      })}
     </>
   );
 };
