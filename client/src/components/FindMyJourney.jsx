@@ -1,5 +1,7 @@
 import styled from 'styled-components';
-import { DestinationCard, PassForm } from './';
+import { DestinationCard, Loader } from './';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const Wrapper = styled.div``;
 const Banner = styled.img`
@@ -56,7 +58,82 @@ const JourneyCardDetails = styled.div`
   color: #676f82;
   gap: 1rem;
 `;
+
+const JourneyForm = styled.form`
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  padding: 40px 30px;
+  width: 780px;
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+`;
+const JourneyInput = styled.input`
+  margin: 0 8px;
+  width: 35%;
+  height: 2.5rem;
+  border: 0.1px solid gainsboro;
+  padding-left: 10px;
+  border-radius: 4px;
+  &:focus {
+    outline: none;
+  }
+  &:hover {
+    background-color: rgba(255, 196, 201, 0.318);
+  }
+`;
+
+const JourneyButton = styled.button`
+  border: none;
+  cursor: pointer;
+  width: 170px;
+  color: white;
+  background-color: rgb(221, 20, 50);
+  border-radius: 4px;
+  margin-left: 0.5rem;
+  padding: 12px;
+`;
+
 const FindMyJourney = () => {
+  const [to, setTo] = useState('');
+  const [from, setFrom] = useState('');
+
+  const [loading, setLoading] = useState(false);
+
+  const [allBuses, setAllBuses] = useState();
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const res = await fetch(`/api/buses`, {
+        method: 'post',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({
+          to,
+          from,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      setAllBuses(data);
+    } catch (error) {
+      toast.error(error.message);
+    }
+    setLoading(false);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    fetchData();
+  };
+
   return (
     <Wrapper>
       <Banner
@@ -69,7 +146,23 @@ const FindMyJourney = () => {
         </h1>
         <p>Your traveling satisfaction will be more exciting!</p>
       </TextContainer>
-      <PassForm />
+      <JourneyForm action="">
+        <JourneyInput
+          type="text"
+          placeholder="From"
+          value={from}
+          onChange={(e) => setFrom(e.target.value)}
+        />
+        <JourneyInput
+          type="text"
+          placeholder="To"
+          value={to}
+          onChange={(e) => setTo(e.target.value)}
+        />
+        <JourneyButton type="submit" onClick={handleSubmit} disabled={loading}>
+          {loading ? <Loader /> : 'Find My Journey'}
+        </JourneyButton>
+      </JourneyForm>
       <JourneyCard>
         <JourneyCardDescription>
           <JourneyCardTitle>Service Provider</JourneyCardTitle>
@@ -79,7 +172,7 @@ const FindMyJourney = () => {
             <p>Fare</p>
           </JourneyCardDetails>
         </JourneyCardDescription>
-        <DestinationCard />
+        <DestinationCard allBuses={allBuses} />
       </JourneyCard>
     </Wrapper>
   );

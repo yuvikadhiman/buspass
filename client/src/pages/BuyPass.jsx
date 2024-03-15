@@ -1,16 +1,69 @@
-import styled from "styled-components";
-import { DestinationCard } from "../components";
+import styled from 'styled-components';
+import { DestinationCard, Loader } from '../components';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+
 const BuyPass = () => {
+  const [to, setTo] = useState('');
+  const [from, setFrom] = useState('');
+
+  const [loading, setLoading] = useState(false);
+
+  const [allBuses, setAllBuses] = useState();
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const res = await fetch(`/api/buses`, {
+        method: 'post',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({
+          to,
+          from,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      setAllBuses(data);
+    } catch (error) {
+      toast.error(error.message);
+    }
+    setLoading(false);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    fetchData();
+  };
+
   return (
     <>
       <JourneyForm action="">
         <h4>Book Pass</h4>
-        <JourneyInput type="text" placeholder="From" />
-        <JourneyInput type="text" placeholder="To" />
-        <JourneyButton type="submit">Find My Journey</JourneyButton>
+        <JourneyInput
+          type="text"
+          placeholder="From"
+          value={from}
+          onChange={(e) => setFrom(e.target.value)}
+        />
+        <JourneyInput
+          type="text"
+          placeholder="To"
+          value={to}
+          onChange={(e) => setTo(e.target.value)}
+        />
+        <JourneyButton type="submit" onClick={handleSubmit} disabled={loading}>
+          {loading ? <Loader /> : 'Find My Journey'}
+        </JourneyButton>
       </JourneyForm>
       <BusPass>
-        <DestinationCard />
+        <DestinationCard allBuses={allBuses} />
       </BusPass>
     </>
   );
@@ -64,50 +117,50 @@ const JourneyButton = styled.button`
   padding: 12px;
 `;
 const BusPass = styled.div`
-   display: block;
+  display: block;
   margin: auto;
   width: 80%;
-  
 `;
-const passes = [
-  {
-    id: 1,
-    name: "Himachal Express",
-    from: "Shimla",
-    to: "Solan",
-    boardingPoint: "Shimla Bus Stand",
-    arrivalTime: "12:00 PM",
-    departureTime: "9:00 AM",
-    price: "500 INR",
-  },
-  {
-    id: 2,
-    name: "Himalayan Queen",
-    from: "Shimla",
-    to: "Domeher",
-    boardingPoint: "ISBT Shimla",
-    arrivalTime: "3:30 PM",
-    departureTime: "12:00 PM",
-    price: "600 INR",
-  },
-  {
-    id: 3,
-    name: "Shivalik Deluxe",
-    from: "Domeher",
-    to: "Solan",
-    boardingPoint: "Victory Tunnel, Shimla",
-    arrivalTime: "5:30 PM",
-    departureTime: "3:00 PM",
-    price: "400 INR",
-  },
-  {
-    id: 4,
-    name: "HRTC Volvo",
-    from: "Domeher",
-    to: "Shimla",
-    boardingPoint: "Tutikandi, Shimla",
-    arrivalTime: "8:00 PM",
-    departureTime: "4:00 PM",
-    price: "1000 INR",
-  },
-];
+
+// const passes = [
+//   {
+//     id: 1,
+//     name: "Himachal Express",
+//     from: "Shimla",
+//     to: "Solan",
+//     boardingPoint: "Shimla Bus Stand",
+//     arrivalTime: "12:00 PM",
+//     departureTime: "9:00 AM",
+//     price: "500 INR",
+//   },
+//   {
+//     id: 2,
+//     name: "Himalayan Queen",
+//     from: "Shimla",
+//     to: "Domeher",
+//     boardingPoint: "ISBT Shimla",
+//     arrivalTime: "3:30 PM",
+//     departureTime: "12:00 PM",
+//     price: "600 INR",
+//   },
+//   {
+//     id: 3,
+//     name: "Shivalik Deluxe",
+//     from: "Domeher",
+//     to: "Solan",
+//     boardingPoint: "Victory Tunnel, Shimla",
+//     arrivalTime: "5:30 PM",
+//     departureTime: "3:00 PM",
+//     price: "400 INR",
+//   },
+//   {
+//     id: 4,
+//     name: "HRTC Volvo",
+//     from: "Domeher",
+//     to: "Shimla",
+//     boardingPoint: "Tutikandi, Shimla",
+//     arrivalTime: "8:00 PM",
+//     departureTime: "4:00 PM",
+//     price: "1000 INR",
+//   },
+// ];

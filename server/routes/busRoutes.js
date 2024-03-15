@@ -3,6 +3,6 @@ import { getBuses } from '../controllers/busController.js';
 
 const router = express.Router();
 
-router.get('/buses', getBuses);
+router.post('/buses', getBuses);
 
 export default router;

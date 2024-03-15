@@ -1,15 +1,20 @@
-import React from "react";
-import { FaAlignLeft, FaUserCircle, FaCaretDown } from "react-icons/fa";
-import { useState } from "react";
-import styled from "styled-components";
-import { useAppContext } from "../context/AppContext";
-import Loader from "./Loader";
-import Logo from "../assets/logo.png";
-import { Link, useNavigate } from "react-router-dom";
+import {FaUserCircle, FaCaretDown } from 'react-icons/fa';
+import { useState } from 'react';
+import styled from 'styled-components';
+import { useAppContext } from '../context/AppContext';
+import {useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const DashboardNavbar = () => {
   const [showLogout, setShowLogout] = useState(false);
   const { authUser, logoutUser } = useAppContext();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logoutUser();
+    setTimeout(() => navigate('/'), 500);
+    toast.success('Logged out successfully');
+  };
 
   return (
     <Wrapper>
@@ -24,8 +29,8 @@ const DashboardNavbar = () => {
             {/* {user.firstName} */}
             <FaCaretDown />
           </button>
-          <div className={showLogout ? "dropdown show-dropdown" : "dropdown"}>
-            <button onClick={logoutUser} className="dropdown-btn">
+          <div className={showLogout ? 'dropdown show-dropdown' : 'dropdown'}>
+            <button onClick={handleLogout} className="dropdown-btn">
               logout
             </button>
           </div>
@@ -97,6 +102,5 @@ const Wrapper = styled.nav`
     margin: 0;
     font-size: 20px;
   }
-  
 `;
 export default DashboardNavbar;

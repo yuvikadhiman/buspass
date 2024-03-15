@@ -1,12 +1,12 @@
-import { Navigate, Outlet } from "react-router-dom";
-import styled from "styled-components";
-import { Sidebar } from "../components";
-import { useAppContext } from "../context/AppContext";
-import DashboardNavbar from "../components/DashboardNavbar";
+import { Navigate, Outlet } from 'react-router-dom';
+import styled from 'styled-components';
+import { Sidebar } from '../components';
+import { useAppContext } from '../context/AppContext';
+import DashboardNavbar from '../components/DashboardNavbar';
 
 const DashboardLayout = () => {
   const { authUser } = useAppContext();
-  return (
+  return authUser ? (
     <Wrapper>
       <main className="dashboard">
         {/* <BigSidebar /> */}
@@ -24,12 +24,12 @@ const DashboardLayout = () => {
         <Outlet />
       </MainDashboard> */}
     </Wrapper>
+  ) : (
+    <>{<Navigate to="/auth" />}</>
   );
-  // authUser ?
-  // : (
-  //   <>{<Navigate to="/auth" />}</>
-  // );
 };
+
+
 const Wrapper = styled.section`
   .dashboard {
     display: grid;

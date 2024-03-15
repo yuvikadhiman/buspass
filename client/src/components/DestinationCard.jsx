@@ -1,5 +1,9 @@
-import styled from "styled-components";
-import { buses } from "../utils/data";
+/* eslint-disable react/prop-types */
+import styled from 'styled-components';
+import Loader from './Loader';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+import { useAppContext } from '../context/AppContext';
 
 const CardContainer = styled.div`
   margin-top: 10px;
@@ -43,34 +47,88 @@ const ServiceProviderDetails = styled.div`
   }
 `;
 
-const DestinationCard = () => {
+const DestinationCard = ({ allBuses }) => {
+  const { authUser } = useAppContext();
+  const buses = allBuses?.buses;
+
+  const [busId, setBusId] = useState('');
+
+  const handleSubmit = async () => {
+    if (!authUser) {
+      return toast.error('Please login first');
+    }
+    try {
+      const res = await fetch(`/api/user/book`, {
+        method: 'post',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({
+          busId,
+        }),
+      });
+
+      const data = await res.json();
+      console.log(data);
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      toast.success(data.msg);
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error(error);
+    }
+  };
+
+  if (!allBuses) {
+    return <Loader />;
+  }
   return (
     <>
-      {buses.map((item) => {
-        return (
-          <CardContainer key={item?.id}>
-            <ServiceProvider>
-              <p>{item?.name}</p>
-              <p>
-                <span>Route : </span>
-                {`${item?.from} to ${item?.to}`}
-              </p>
-              <p>
-                <span>Boarding Point : </span>
-                {item?.boardingPoint}
-              </p>
-            </ServiceProvider>
-            <ServiceProviderDetails>
-              <p>{item?.departureTime}</p>
-              <p>{item?.arrivalTime}</p>
-              <p>
-                {item?.price}
-                <button>Book my pass</button>
-              </p>
-            </ServiceProviderDetails>
-          </CardContainer>
-        );
-      })}
+      {buses?.length > 0 ? (
+        <form>
+          <input
+            type="text"
+            value={busId}
+            hidden
+            onChange={(e) => setBusId(e.target.value)}
+          />
+
+          {buses.map((item) => {
+            return (
+              <CardContainer key={item?._id}>
+                <ServiceProvider>
+                  <p>{item?.name}</p>
+                  <p>
+                    <span>Route : </span>
+                    {`${item?.from} to ${item?.to}`}
+                  </p>
+                  <p>
+                    <span>Boarding Point : </span>
+                    {item?.boardingPoint}
+                  </p>
+                </ServiceProvider>
+                <ServiceProviderDetails>
+                  <p>{item?.departureTime}</p>
+                  <p>{item?.arrivalTime}</p>
+                  <p>
+                    {item?.price}
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setBusId(item._id);
+                        handleSubmit();
+                      }}
+                    >
+                      Book my pass
+                    </button>
+                  </p>
+                </ServiceProviderDetails>
+              </CardContainer>
+            );
+          })}
+        </form>
+      ) : (
+        <h1>No Buses are available for your route</h1>
+      )}
     </>
   );
 };

@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import styled from "styled-components";
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import styled from 'styled-components';
+import { useAppContext } from '../context/AppContext';
 
 const Wrapper = styled.div`
   display: flex;
@@ -27,19 +28,9 @@ const PassRoute = styled.div`
   }
 `;
 
-const DivStyled = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-`;
-
-const ToStyled = styled.div``;
-const ValidityStyled = styled.div``;
-
-const PStyled = styled.div``;
-
 const PassCards = () => {
   const [myPasses, setMyPasses] = useState([]);
+  const { authUser } = useAppContext();
 
   useEffect(() => {
     fetch(`/api/user/get-pass`)
@@ -56,19 +47,25 @@ const PassCards = () => {
 
   return (
     <Wrapper>
-      {passes.map((pass) => {
-        const date = new Date(pass.validity);
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const day = String(date.getDate()).padStart(2, "0");
-        const formattedDate = `${day}-${month}-${year}`;
+      {myPasses.map((pass) => {
+        let date = new Date(pass.validity);
+        let year = date.getFullYear();
+        let month = String(date.getMonth() + 1).padStart(2, '0');
+        let day = String(date.getDate()).padStart(2, '0');
+        const formattedValidDate = `${day}-${month}-${year}`;
+
+        date = new Date(pass.createdAt);
+        year = date.getFullYear();
+        month = String(date.getMonth() + 1).padStart(2, '0');
+        day = String(date.getDate()).padStart(2, '0');
+        const formattedIssueDate = `${day}-${month}-${year}`;
 
         return (
           <PassCard key={pass._id}>
             <PassRoute>
               <div>
                 <h6>Name of the Passenger</h6>
-                <p>name</p>
+                <p>{authUser.userDetails.name}</p>
               </div>
               <div>
                 <h6>From</h6>
@@ -79,12 +76,18 @@ const PassCards = () => {
                 <p>{pass.to}</p>
               </div>
             </PassRoute>
-            <div>
-              <p>{`Issued at    ${pass.createdAt}`}</p>
-              <p>{`Valid till    ${formattedDate}`}</p>
-            </div>
-            <button>book</button>
-            <button>pay</button>
+            <PassRoute>
+              <div>
+                <h6>Issued at</h6>
+                <p>{`${formattedIssueDate}`}</p>
+              </div>
+              <div>
+                <h6>Valid till </h6>
+                <p>{`${formattedValidDate}`}</p>
+              </div>
+              {/* <button>book</button> */}
+            </PassRoute>
+            {/* <button>pay</button> */}
           </PassCard>
         );
       })}
@@ -93,25 +96,25 @@ const PassCards = () => {
 };
 export default PassCards;
 
-export const passes = [
-  {
-    _id: "65f0b0d2e89098ff91fc2b1f",
-    from: "wakna",
-    to: "jaypee",
-    validity: "2024-04-11T19:45:22.937Z",
-    userId: "65ef6851403d69eefc6a209f",
-    createdAt: "2024-03-12T19:45:22.940Z",
-    updatedAt: "2024-03-12T19:45:22.940Z",
-    __v: 0,
-  },
-  {
-    _id: "65f0b0d2e89098ff91fc2b1f",
-    from: "wakna",
-    to: "jaypee",
-    validity: "2024-04-11T19:45:22.937Z",
-    userId: "65ef6851403d69eefc6a209f",
-    createdAt: "2024-03-12T19:45:22.940Z",
-    updatedAt: "2024-03-12T19:45:22.940Z",
-    __v: 0,
-  },
-];
+// export const passes = [
+//   {
+//     _id: "65f0b0d2e89098ff91fc2b1f",
+//     from: "wakna",
+//     to: "jaypee",
+//     validity: "2024-04-11T19:45:22.937Z",
+//     userId: "65ef6851403d69eefc6a209f",
+//     createdAt: "2024-03-12T19:45:22.940Z",
+//     updatedAt: "2024-03-12T19:45:22.940Z",
+//     __v: 0,
+//   },
+//   {
+//     _id: "65f0b0d2e89098ff91fc2b1f",
+//     from: "wakna",
+//     to: "jaypee",
+//     validity: "2024-04-11T19:45:22.937Z",
+//     userId: "65ef6851403d69eefc6a209f",
+//     createdAt: "2024-03-12T19:45:22.940Z",
+//     updatedAt: "2024-03-12T19:45:22.940Z",
+//     __v: 0,
+//   },
+// ];
