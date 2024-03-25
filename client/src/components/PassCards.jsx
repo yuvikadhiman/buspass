@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { useAppContext } from '../context/AppContext';
+import { APP_URL } from '../utils/config';
+import { Link } from 'react-router-dom';
 
 const Wrapper = styled.div`
   display: flex;
@@ -27,16 +29,28 @@ const PassRoute = styled.div`
     color: #023058;
   }
 `;
+const NoPassWrapper = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  padding: 15px 25px;
+  background-color: rgb(221, 20, 50);
+  color: white;
+`;
 
 const PassCards = () => {
   const [myPasses, setMyPasses] = useState([]);
   const { authUser } = useAppContext();
 
   useEffect(() => {
-    fetch(`/api/user/get-pass`)
+    fetch(`${APP_URL}/api/user/get-pass`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data.passes);
         setMyPasses(data.passes);
       })
       .catch((err) => {
@@ -46,52 +60,61 @@ const PassCards = () => {
   }, []);
 
   return (
-    <Wrapper>
-      {myPasses.map((pass) => {
-        let date = new Date(pass.validity);
-        let year = date.getFullYear();
-        let month = String(date.getMonth() + 1).padStart(2, '0');
-        let day = String(date.getDate()).padStart(2, '0');
-        const formattedValidDate = `${day}-${month}-${year}`;
+    <>
+      {myPasses?.length > 0 ? (
+        <Wrapper>
+          {myPasses.map((pass) => {
+            let date = new Date(pass.validity);
+            let year = date.getFullYear();
+            let month = String(date.getMonth() + 1).padStart(2, '0');
+            let day = String(date.getDate()).padStart(2, '0');
+            const formattedValidDate = `${day}-${month}-${year}`;
 
-        date = new Date(pass.createdAt);
-        year = date.getFullYear();
-        month = String(date.getMonth() + 1).padStart(2, '0');
-        day = String(date.getDate()).padStart(2, '0');
-        const formattedIssueDate = `${day}-${month}-${year}`;
+            date = new Date(pass.createdAt);
+            year = date.getFullYear();
+            month = String(date.getMonth() + 1).padStart(2, '0');
+            day = String(date.getDate()).padStart(2, '0');
+            const formattedIssueDate = `${day}-${month}-${year}`;
 
-        return (
-          <PassCard key={pass._id}>
-            <PassRoute>
-              <div>
-                <h6>Name of the Passenger</h6>
-                <p>{authUser.userDetails.name}</p>
-              </div>
-              <div>
-                <h6>From</h6>
-                <p>{pass.from}</p>
-              </div>
-              <div>
-                <h6>To</h6>
-                <p>{pass.to}</p>
-              </div>
-            </PassRoute>
-            <PassRoute>
-              <div>
-                <h6>Issued at</h6>
-                <p>{`${formattedIssueDate}`}</p>
-              </div>
-              <div>
-                <h6>Valid till </h6>
-                <p>{`${formattedValidDate}`}</p>
-              </div>
-              {/* <button>book</button> */}
-            </PassRoute>
-            {/* <button>pay</button> */}
-          </PassCard>
-        );
-      })}
-    </Wrapper>
+            return (
+              <PassCard key={pass._id}>
+                <PassRoute>
+                  <div>
+                    <h6>Name of the Passenger</h6>
+                    <p>{authUser.userDetails.name}</p>
+                  </div>
+                  <div>
+                    <h6>From</h6>
+                    <p>{pass.from}</p>
+                  </div>
+                  <div>
+                    <h6>To</h6>
+                    <p>{pass.to}</p>
+                  </div>
+                </PassRoute>
+                <PassRoute>
+                  <div>
+                    <h6>Issued at</h6>
+                    <p>{`${formattedIssueDate}`}</p>
+                  </div>
+                  <div>
+                    <h6>Valid till </h6>
+                    <p>{`${formattedValidDate}`}</p>
+                  </div>
+                  {/* <button>book</button> */}
+                </PassRoute>
+                {/* <button>pay</button> */}
+              </PassCard>
+            );
+          })}
+        </Wrapper>
+      ) : (
+        <NoPassWrapper>
+          <h2>You have no pass</h2>
+          <StyledLink to="buy-pass">Buy one pass </StyledLink>
+        </NoPassWrapper>
+      )}
+    </>
   );
 };
 export default PassCards;

@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { DestinationCard, Loader } from './';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { APP_URL } from '../utils/config';
 
 const Wrapper = styled.div``;
 const Banner = styled.img`
@@ -109,7 +110,7 @@ const FindMyJourney = () => {
 
   const fetchData = async () => {
     try {
-      const res = await fetch(`/api/buses`, {
+      const res = await fetch(`${APP_URL}/api/buses`, {
         method: 'post',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({

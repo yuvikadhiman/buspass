@@ -4,6 +4,7 @@ import Loader from './Loader';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useAppContext } from '../context/AppContext';
+import { APP_URL } from '../utils/config.js';
 
 const CardContainer = styled.div`
   margin-top: 10px;
@@ -58,7 +59,7 @@ const DestinationCard = ({ allBuses }) => {
       return toast.error('Please login first');
     }
     try {
-      const res = await fetch(`/api/user/book`, {
+      const res = await fetch(`${APP_URL}/api/user/book`, {
         method: 'post',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({
