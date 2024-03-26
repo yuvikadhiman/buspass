@@ -12,6 +12,8 @@ export const bookMyPass = async (req, res) => {
     if (!bus) {
       return res.status(400).json({ error: 'Invalid pass id' });
     }
+    res.json({ pass: bus });
+
     // const stripeInstance = stripe(process.env.STRIPE_PRIVATE_KEY);
     // const session = await stripeInstance.checkout.sessions.create({
     //   payment_method_types: ['card'],
@@ -33,48 +35,40 @@ export const bookMyPass = async (req, res) => {
     //   cancel_url: `${process.env.CLIENT_URL}/cancel.html`,
     // });
 
-    req.body.createdBy = req.user._id;
-    const expirationDate = new Date();
-    expirationDate.setDate(expirationDate.getDate() + 30);
+    // req.body.createdBy = req.user._id;
+    // const expirationDate = new Date();
+    // expirationDate.setDate(expirationDate.getDate() + 30);
 
-    const newPass = new Pass({
-      from: bus[0].from,
-      to: bus[0].to,
-      validity: expirationDate.toISOString(),
-      userId: req.body.createdBy,
-    });
+    // const newPass = new Pass({
+    //   from: bus[0].from,
+    //   to: bus[0].to,
+    //   validity: expirationDate.toISOString(),
+    //   userId: req.body.createdBy,
+    // });
 
-    await newPass.save();
+    // await newPass.save();
 
     res.status(201).json({
       msg: 'Pass created successfully',
-      pass: newPass,
+      // pass: newPass,
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: error });
   }
 };
 
 export const getMyPass = async (req, res) => {
   try {
-    let user = {
-      _id: req.user._id,
-      name: req.user.name,
-      email: req.user.email,
-      createdAt: req.user.createdAt,
-      updatedAt: req.user.updatedAt,
-      __v: req.user.__v,
-    };
-    const passes = await Pass.find({ userId: user._id });
+    const passes = await Pass.find({ userId: req.user.user._id });
 
-    if (!passes) {
-      return res.status(201).json({ msg: `You don't have any pass` });
+    if (!passes || passes.length === 0) {
+      return res.status(404).json({ msg: "You don't have any passes" });
     }
 
-    res.json({ user, passes });
+    res.json({ myPasses: passes });
   } catch (error) {
-    console.log(error);
+    console.error('Error in getMyPass:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };

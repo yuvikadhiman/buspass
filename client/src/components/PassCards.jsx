@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { useAppContext } from '../context/AppContext';
-import { APP_URL } from '../utils/config';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Wrapper = styled.div`
   display: flex;
@@ -48,16 +47,35 @@ const PassCards = () => {
   const { authUser } = useAppContext();
 
   useEffect(() => {
-    fetch(`${APP_URL}/api/user/get-pass`)
-      .then((res) => res.json())
-      .then((data) => {
-        setMyPasses(data.passes);
-      })
-      .catch((err) => {
-        console.log(err.message);
-        toast.error(err);
-      });
+    getMyPass();
   }, []);
+
+  const getMyPass = async () => {
+    const token = JSON.parse(localStorage.getItem('buspass')).token;
+    if (token) {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_SERVER_URL}/api/user/get-pass`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await response.json();
+        if (data.msg) {
+          toast.error(data.msg);
+        }
+        setMyPasses(data.myPasses);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      console.log('No token found, user not logged in');
+    }
+  };
 
   return (
     <>
@@ -118,26 +136,3 @@ const PassCards = () => {
   );
 };
 export default PassCards;
-
-// export const passes = [
-//   {
-//     _id: "65f0b0d2e89098ff91fc2b1f",
-//     from: "wakna",
-//     to: "jaypee",
-//     validity: "2024-04-11T19:45:22.937Z",
-//     userId: "65ef6851403d69eefc6a209f",
-//     createdAt: "2024-03-12T19:45:22.940Z",
-//     updatedAt: "2024-03-12T19:45:22.940Z",
-//     __v: 0,
-//   },
-//   {
-//     _id: "65f0b0d2e89098ff91fc2b1f",
-//     from: "wakna",
-//     to: "jaypee",
-//     validity: "2024-04-11T19:45:22.937Z",
-//     userId: "65ef6851403d69eefc6a209f",
-//     createdAt: "2024-03-12T19:45:22.940Z",
-//     updatedAt: "2024-03-12T19:45:22.940Z",
-//     __v: 0,
-//   },
-// ];

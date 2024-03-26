@@ -1,8 +1,8 @@
-import {FaUserCircle, FaCaretDown } from 'react-icons/fa';
+import { FaUserCircle, FaCaretDown } from 'react-icons/fa';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useAppContext } from '../context/AppContext';
-import {useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const DashboardNavbar = () => {
@@ -12,7 +12,7 @@ const DashboardNavbar = () => {
 
   const handleLogout = () => {
     logoutUser();
-    setTimeout(() => navigate('/'), 500);
+    setTimeout(() => navigate('/auth'), 0);
     toast.success('Logged out successfully');
   };
 

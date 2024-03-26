@@ -1,6 +1,7 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+/* eslint-disable no-undef */
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   Homepage,
   Auth,
@@ -8,12 +9,14 @@ import {
   HomeLayout,
   Error,
   MyPass,
-} from "./pages";
-import BuyPass from "./pages/BuyPass";
+} from './pages';
+import BuyPass from './pages/BuyPass';
+import PaymentSuccess from './pages/PaymentSuccess';
+import PaymentFail from './pages/PaymentFail';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <HomeLayout />,
     children: [
       {
@@ -23,7 +26,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "dashboard",
+    path: 'dashboard',
     element: <DashboardLayout />,
     children: [
       {
@@ -31,18 +34,26 @@ const router = createBrowserRouter([
         element: <MyPass />,
       },
       {
-        path: "buy-pass",
+        path: 'buy-pass',
         element: <BuyPass />,
       },
     ],
   },
   {
-    path: "/auth",
+    path: '/auth',
     element: <Auth />,
   },
   {
-    path: "error",
+    path: 'error',
     element: <Error />,
+  },
+  {
+    path: '/success',
+    element: <PaymentSuccess />,
+  },
+  {
+    path: '/failed',
+    element: <PaymentFail />,
   },
 ]);
 

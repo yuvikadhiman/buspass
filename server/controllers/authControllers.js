@@ -45,11 +45,11 @@ export const register = async (req, res) => {
         delete userDetails.role;
       }
 
-      generateTokenAndSetCookie(newUser._id, res);
+      const token = generateTokenAndSetCookie(newUser, res);
       await newUser.save();
       res
         .status(201)
-        .json({ msg: 'Account created successfully', userDetails });
+        .json({ msg: 'Account created successfully', userDetails, token });
     } else {
       return res.status(400).json({ error: 'Invalid user data' });
     }
@@ -73,7 +73,7 @@ export const login = async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    generateTokenAndSetCookie(user._id, res);
+    const token = generateTokenAndSetCookie(user, res);
 
     let userDetails = user;
     userDetails = userDetails.toObject();
@@ -84,6 +84,7 @@ export const login = async (req, res) => {
     return res.status(200).json({
       msg: 'User Logged in Successful',
       userDetails,
+      token,
     });
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });

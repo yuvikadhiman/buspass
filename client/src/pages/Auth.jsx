@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { Loader } from '../components';
 import { toast } from 'react-toastify';
 import { useAppContext } from '../context/AppContext';
-import { APP_URL } from '../utils/config';
 
 const imgUrl =
   'https://img.freepik.com/free-vector/forgot-password-concept-illustration_114360-1010.jpg?w=740&t=st=1710164733~exp=1710165333~hmac=b443c9732e6450fdfe2ef365f41495bc825323b51c929356ffd6817156386af3';
@@ -106,7 +105,7 @@ const Auth = () => {
 
   useEffect(() => {
     if (authUser) {
-      setTimeout(() => navigate('/dashboard'), 500);
+      setTimeout(() => navigate('/dashboard'), 0);
     }
   }, [authUser, navigate]);
 
@@ -122,14 +121,14 @@ const Auth = () => {
       }
       setLoading(true);
       try {
-        console.log('trying to login');
-        const res = await fetch(`${APP_URL}/api/login`, {
+        const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password }),
+          credentials: 'include',
         });
         const data = await res.json();
-        console.log(data);
+
         if (data.error) {
           throw new Error(data.error);
         }
@@ -165,7 +164,7 @@ const Auth = () => {
 
       setLoading(true);
       try {
-        const res = await fetch(`${APP_URL}/api/register`, {
+        const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/register`, {
           method: 'post',
           headers: { 'Content-type': 'application/json' },
           body: JSON.stringify({

@@ -4,7 +4,8 @@ import Loader from './Loader';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useAppContext } from '../context/AppContext';
-import { APP_URL } from '../utils/config.js';
+import { useNavigate } from 'react-router-dom';
+import { loadStripe } from '@stripe/stripe-js';
 
 const CardContainer = styled.div`
   margin-top: 10px;
@@ -39,7 +40,7 @@ const ServiceProviderDetails = styled.div`
   button {
     border: none;
     cursor: pointer;
-    width: 100px;
+    width: 120px;
     color: white;
     background-color: rgb(221, 20, 50);
     border-radius: 4px;
@@ -53,29 +54,39 @@ const DestinationCard = ({ allBuses }) => {
   const buses = allBuses?.buses;
 
   const [busId, setBusId] = useState('');
-
+  const navigate = useNavigate();
   const handleSubmit = async () => {
     if (!authUser) {
+      setTimeout(() => navigate('/auth'), 500);
       return toast.error('Please login first');
     }
     try {
-      const res = await fetch(`${APP_URL}/api/user/book`, {
+      const token = JSON.parse(localStorage.getItem('buspass')).token;
+      const stripe_key = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+      const stripe = await loadStripe(stripe_key);
+
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/book`, {
         method: 'post',
-        headers: { 'Content-type': 'application/json' },
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
           busId,
         }),
       });
 
-      const data = await res.json();
-      console.log(data);
-      if (data.error) {
-        throw new Error(data.error);
+      const session = await res.json();
+      const result = stripe.redirectToCheckout({
+        sessionId: session.id,
+      });
+
+      if (result.error) {
+        // toast.error(result.error)
+        console.log(result.error);
       }
-      toast.success(data.msg);
     } catch (error) {
       console.error('Error:', error);
-      toast.error(error);
     }
   };
 
@@ -119,7 +130,16 @@ const DestinationCard = ({ allBuses }) => {
                         handleSubmit();
                       }}
                     >
-                      Book my pass
+                      Buy with Card
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setBusId(item._id);
+                        handleSubmit();
+                      }}
+                    >
+                      Buy with Crypto
                     </button>
                   </p>
                 </ServiceProviderDetails>

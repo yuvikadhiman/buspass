@@ -12,11 +12,16 @@ const Wrapper = styled.main`
 `;
 
 const TextStyle = styled.div`
-  color: #00be00;
+  color: rgb(221, 20, 50);
   font-size: 50px;
   font-weight: 600;
 `;
 
+const FailedMsg = styled.p`
+  font-size: 20px;
+  color: grey;
+  font-weight: 600;
+`;
 const BackHome = styled(Link)`
   text-decoration: none;
   color: black;
@@ -24,12 +29,14 @@ const BackHome = styled(Link)`
   font-weight: 600;
 `;
 
-const PaymentSuccess = () => {
+const PaymentFail = () => {
   return (
     <Wrapper>
-      <TextStyle>Payment Successful</TextStyle>
+      <TextStyle>Payment Failed</TextStyle>
+      <FailedMsg>Any amount deducted will be refunded within 48 hrs</FailedMsg>
+
       <BackHome to="/dashboard">Back Home</BackHome>
     </Wrapper>
   );
 };
-export default PaymentSuccess;
+export default PaymentFail;

@@ -2,7 +2,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState } from 'react';
 import { toast } from 'react-toastify';
-import { APP_URL } from '../utils/config.js';
 
 export const AppContext = createContext();
 
@@ -20,7 +19,7 @@ export const AppContextProvider = ({ children }) => {
   const logoutUser = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${APP_URL}/api/logout`, {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/logout`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });
