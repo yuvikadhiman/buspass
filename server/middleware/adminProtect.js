@@ -3,7 +3,7 @@ import authProtect from './authProtect.js';
 const adminProtect = async (req, res, next) => {
   try {
     await authProtect(req, res, next);
-    if (req.user.role != 'admin') {
+    if (req.user.user.role != 'admin') {
       return res.status(404).json({ msg: 'You are not authorized' });
     }
     next();

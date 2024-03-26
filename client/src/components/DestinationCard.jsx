@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import styled from 'styled-components';
 import Loader from './Loader';
-import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useAppContext } from '../context/AppContext';
 import { useNavigate } from 'react-router-dom';
@@ -53,28 +52,42 @@ const DestinationCard = ({ allBuses }) => {
   const { authUser } = useAppContext();
   const buses = allBuses?.buses;
 
-  const [busId, setBusId] = useState('');
   const navigate = useNavigate();
-  const handleSubmit = async () => {
+
+  const buyWithCrypto = async (busId) => {
     if (!authUser) {
       setTimeout(() => navigate('/auth'), 500);
-      return toast.error('Please login first');
+      toast.error('Please login first');
+      return false;
+    }
+    toast.success('Currently Working');
+    toast.success(`You selected bus with id ${busId}`);
+  };
+
+  const buyWithCard = async (busId) => {
+    if (!authUser) {
+      setTimeout(() => navigate('/auth'), 500);
+      toast.error('Please login first');
+      return false;
     }
     try {
       const token = JSON.parse(localStorage.getItem('buspass')).token;
       const stripe_key = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
       const stripe = await loadStripe(stripe_key);
 
-      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/book`, {
-        method: 'post',
-        headers: {
-          'Content-type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          busId,
-        }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/api/user/book`,
+        {
+          method: 'post',
+          headers: {
+            'Content-type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            busId,
+          }),
+        }
+      );
 
       const session = await res.json();
       const result = stripe.redirectToCheckout({
@@ -97,13 +110,6 @@ const DestinationCard = ({ allBuses }) => {
     <>
       {buses?.length > 0 ? (
         <form>
-          <input
-            type="text"
-            value={busId}
-            hidden
-            onChange={(e) => setBusId(e.target.value)}
-          />
-
           {buses.map((item) => {
             return (
               <CardContainer key={item?._id}>
@@ -126,8 +132,7 @@ const DestinationCard = ({ allBuses }) => {
                     <button
                       onClick={(e) => {
                         e.preventDefault();
-                        setBusId(item._id);
-                        handleSubmit();
+                        buyWithCard(item._id);
                       }}
                     >
                       Buy with Card
@@ -135,8 +140,7 @@ const DestinationCard = ({ allBuses }) => {
                     <button
                       onClick={(e) => {
                         e.preventDefault();
-                        setBusId(item._id);
-                        handleSubmit();
+                        buyWithCrypto(item._id);
                       }}
                     >
                       Buy with Crypto
