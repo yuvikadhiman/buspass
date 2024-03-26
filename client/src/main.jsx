@@ -4,7 +4,7 @@ import './index.css';
 import { AppContextProvider } from './context/AppContext.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <AppContextProvider>
-      <App />
-    </AppContextProvider>
+  <AppContextProvider>
+    <App />
+  </AppContextProvider>
 );
