@@ -33,7 +33,7 @@ const PaymentSuccess = () => {
   useEffect(() => {
     toast.success('Redirecting to dashboard');
     setTimeout(() => navigate('/dashboard'), 3000);
-  }, []);
+  }, [navigate]);
 
   return (
     <Wrapper>
