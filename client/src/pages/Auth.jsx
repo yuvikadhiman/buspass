@@ -39,7 +39,7 @@ const Heading = styled.h3`
 `;
 const Input = styled.input`
   width: 90%;
-  height: 1.5rem;
+  height: 2.5rem;
   border: 1px solid var(--border-primary);
   background-color: var(--input);
   border-radius: 4px;
@@ -57,7 +57,7 @@ const StyledLink = styled(Link)`
 `;
 
 const Button = styled.button`
-  width: 100%;
+  width: 90%;
   margin: 1rem 0;
   margin-top: 2rem;
   height: 2.5rem;
@@ -121,12 +121,15 @@ const Auth = () => {
       }
       setLoading(true);
       try {
-        const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
-          credentials: 'include',
-        });
+        const res = await fetch(
+          `${import.meta.env.VITE_SERVER_URL}/api/login`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password }),
+            credentials: 'include',
+          }
+        );
         const data = await res.json();
 
         if (data.error) {
@@ -164,17 +167,20 @@ const Auth = () => {
 
       setLoading(true);
       try {
-        const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/register`, {
-          method: 'post',
-          headers: { 'Content-type': 'application/json' },
-          body: JSON.stringify({
-            name: registerInputs.name,
-            email: registerInputs.email,
-            password: registerInputs.password,
-            confirmPassword: registerInputs.confirmPassword,
-            imgUrl: profileUrl,
-          }),
-        });
+        const res = await fetch(
+          `${import.meta.env.VITE_SERVER_URL}/api/register`,
+          {
+            method: 'post',
+            headers: { 'Content-type': 'application/json' },
+            body: JSON.stringify({
+              name: registerInputs.name,
+              email: registerInputs.email,
+              password: registerInputs.password,
+              confirmPassword: registerInputs.confirmPassword,
+              imgUrl: profileUrl,
+            }),
+          }
+        );
 
         const data = await res.json();
         if (data.error) {

@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const Wrapper = styled.main`
   text-align: center;
@@ -25,6 +28,13 @@ const BackHome = styled(Link)`
 `;
 
 const PaymentSuccess = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    toast.success('Redirecting to dashboard');
+    setTimeout(() => navigate('/dashboard'), 3000);
+  }, []);
+
   return (
     <Wrapper>
       <TextStyle>Payment Successful</TextStyle>
