@@ -39,7 +39,7 @@ const Heading = styled.h3`
 `;
 const Input = styled.input`
   width: 90%;
-  height: 2.5rem;
+  height: 1.5rem;
   border: 1px solid var(--border-primary);
   background-color: var(--input);
   border-radius: 4px;
@@ -57,7 +57,7 @@ const StyledLink = styled(Link)`
 `;
 
 const Button = styled.button`
-  width: 90%;
+  width: 100%;
   margin: 1rem 0;
   margin-top: 2rem;
   height: 2.5rem;

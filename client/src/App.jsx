@@ -13,6 +13,7 @@ import {
 import BuyPass from './pages/BuyPass';
 import PaymentSuccess from './pages/PaymentSuccess';
 import PaymentFail from './pages/PaymentFail';
+import AdminPage from './pages/AdminPage';
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Homepage />,
+      },
+      {
+        path: '/admin',
+        element: <AdminPage />,
       },
     ],
   },

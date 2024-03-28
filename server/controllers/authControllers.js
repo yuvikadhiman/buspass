@@ -46,6 +46,7 @@ export const register = async (req, res) => {
       }
 
       const token = generateTokenAndSetCookie(newUser, res);
+
       await newUser.save();
       res
         .status(201)
@@ -73,13 +74,13 @@ export const login = async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    const token = generateTokenAndSetCookie(user, res);
-
     let userDetails = user;
     userDetails = userDetails.toObject();
     if (user.role != 'admin') {
       delete userDetails.role;
     }
+
+    const token = generateTokenAndSetCookie(userDetails, res);
 
     return res.status(200).json({
       msg: 'User Logged in Successful',

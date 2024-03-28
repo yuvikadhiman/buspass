@@ -97,8 +97,6 @@ const DestinationCard = ({ allBuses }) => {
     import.meta.env.VITE_BTC_ADDRESS
   }`;
 
-  const token = JSON.parse(localStorage.getItem('buspass')).token;
-
   const { authUser } = useAppContext();
   const buses = allBuses?.buses;
 
@@ -139,7 +137,7 @@ const DestinationCard = ({ allBuses }) => {
     try {
       // Show loading toast
       const loadingToast = toast.loading('Processing payment...');
-
+      const token = JSON.parse(localStorage.getItem('buspass')).token;
       const res = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/api/user/book-crypto`,
         {
@@ -199,7 +197,7 @@ const DestinationCard = ({ allBuses }) => {
     try {
       const stripe_key = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
       const stripe = await loadStripe(stripe_key);
-
+      const token = JSON.parse(localStorage.getItem('buspass')).token;
       const res = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/api/user/book`,
         {
@@ -218,7 +216,7 @@ const DestinationCard = ({ allBuses }) => {
       const result = stripe.redirectToCheckout({
         sessionId: session.id,
       });
-      
+
       if (result.error) {
         console.log(result.error);
       }
