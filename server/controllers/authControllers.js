@@ -26,7 +26,7 @@ export const register = async (req, res) => {
 
     if (imgUrl) {
       let uploadedResponse = await cloudinary.uploader.upload(imgUrl, {
-        folder: 'whisper',
+        folder: 'buspass',
       });
       imgUrl = uploadedResponse.secure_url;
     }

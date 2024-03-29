@@ -150,8 +150,9 @@ const Auth = () => {
         !registerInputs.name ||
         !registerInputs.email ||
         !registerInputs.password ||
-        !registerInputs.confirmPassword ||
-        !profileUrl
+        !registerInputs.confirmPassword
+        // ||
+        // !profileUrl
       ) {
         toast.error('Please enter all values');
         return;
@@ -177,7 +178,7 @@ const Auth = () => {
               email: registerInputs.email,
               password: registerInputs.password,
               confirmPassword: registerInputs.confirmPassword,
-              imgUrl: profileUrl,
+              imgUrl: '',
             }),
           }
         );
@@ -268,7 +269,7 @@ const Auth = () => {
               />
             </div>
           )}
-          {!isLogin && (
+          {/* {!isLogin && (
             <ImageChoose onClick={() => imageRef.current.click()}>
               {selectedFile ? selectedFile.name : `Choose your pass image`}
               <input
@@ -278,7 +279,7 @@ const Auth = () => {
                 onChange={handleImageChange}
               />
             </ImageChoose>
-          )}
+          )} */}
           <Button type="submit" disabled={loading} onClick={handleSubmit}>
             {loading ? <Loader /> : isLogin ? 'Login' : 'Register'}
           </Button>
