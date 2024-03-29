@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import QrScanner from 'react-qr-scanner';

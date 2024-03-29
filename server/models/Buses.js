@@ -21,6 +21,10 @@ const busesSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    departureTime: {
+      type: String,
+      required: true,
+    },
     price: {
       type: String,
       required: true,
