@@ -165,14 +165,6 @@ const FindMyJourney = () => {
         </JourneyButton>
       </JourneyForm>
       <JourneyCard>
-        <JourneyCardDescription>
-          <JourneyCardTitle>Service Provider</JourneyCardTitle>
-          <JourneyCardDetails>
-            <p>Dep Time</p>
-            <p>Arr time</p>
-            <p>Fare</p>
-          </JourneyCardDetails>
-        </JourneyCardDescription>
         <DestinationCard allBuses={allBuses} />
       </JourneyCard>
     </Wrapper>

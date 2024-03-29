@@ -1,12 +1,12 @@
-import { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import { Loader } from '../components';
-import { toast } from 'react-toastify';
-import { useAppContext } from '../context/AppContext';
+import { useState, useRef, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { Loader } from "../components";
+import { toast } from "react-toastify";
+import { useAppContext } from "../context/AppContext";
 
 const imgUrl =
-  'https://img.freepik.com/free-vector/forgot-password-concept-illustration_114360-1010.jpg?w=740&t=st=1710164733~exp=1710165333~hmac=b443c9732e6450fdfe2ef365f41495bc825323b51c929356ffd6817156386af3';
+  "https://img.freepik.com/free-vector/forgot-password-concept-illustration_114360-1010.jpg?w=740&t=st=1710164733~exp=1710165333~hmac=b443c9732e6450fdfe2ef365f41495bc825323b51c929356ffd6817156386af3";
 
 const FormContainer = styled.div`
   position: absolute;
@@ -73,28 +73,36 @@ const Button = styled.button`
 
 const ImageChoose = styled.div`
   cursor: pointer;
-  height: 1.5rem;
+  width: 60px;
+  height: 60px;
   border: 1px solid var(--border-primary);
   background-color: var(--input);
-  border-radius: 4px;
-  margin: 5px 0;
-  padding: 10px 5%;
   color: grey;
   font-size: 14px;
+  margin: 1rem 0;
+  border-radius: 50%;
 `;
-
+const Imagesection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  p {
+    color: grey;
+    font-size: 14px;
+  }
+`;
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [registerInputs, setRegisterInputs] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const imageRef = useRef(null);
@@ -105,7 +113,7 @@ const Auth = () => {
 
   useEffect(() => {
     if (authUser) {
-      setTimeout(() => navigate('/dashboard'), 0);
+      setTimeout(() => navigate("/dashboard"), 0);
     }
   }, [authUser, navigate]);
 
@@ -116,7 +124,7 @@ const Auth = () => {
     e.preventDefault();
     if (isLogin) {
       if (!email || !password) {
-        toast.error('Please enter all the values');
+        toast.error("Please enter all the values");
         return;
       }
       setLoading(true);
@@ -124,10 +132,10 @@ const Auth = () => {
         const res = await fetch(
           `${import.meta.env.VITE_SERVER_URL}/api/login`,
           {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
-            credentials: 'include',
+            credentials: "include",
           }
         );
         const data = await res.json();
@@ -136,7 +144,7 @@ const Auth = () => {
           throw new Error(data.error);
         }
 
-        localStorage.setItem('buspass', JSON.stringify(data));
+        localStorage.setItem("buspass", JSON.stringify(data));
 
         setAuthUser(data);
         toast.success(data.msg);
@@ -154,11 +162,11 @@ const Auth = () => {
         // ||
         // !profileUrl
       ) {
-        toast.error('Please enter all values');
+        toast.error("Please enter all values");
         return;
       }
       if (registerInputs.password !== registerInputs.confirmPassword) {
-        toast.error('Passwords do not match');
+        toast.error("Passwords do not match");
         return;
       }
       // if (password.length < 6) {
@@ -171,14 +179,14 @@ const Auth = () => {
         const res = await fetch(
           `${import.meta.env.VITE_SERVER_URL}/api/register`,
           {
-            method: 'post',
-            headers: { 'Content-type': 'application/json' },
+            method: "post",
+            headers: { "Content-type": "application/json" },
             body: JSON.stringify({
               name: registerInputs.name,
               email: registerInputs.email,
               password: registerInputs.password,
               confirmPassword: registerInputs.confirmPassword,
-              imgUrl: '',
+              imgUrl: "",
             }),
           }
         );
@@ -188,8 +196,8 @@ const Auth = () => {
           throw new Error(data.error);
         }
 
-        setProfileUrl('');
-        localStorage.setItem('buspass', JSON.stringify(data));
+        setProfileUrl("");
+        localStorage.setItem("buspass", JSON.stringify(data));
         toast.success(data.msg);
         setAuthUser(data);
       } catch (error) {
@@ -206,7 +214,21 @@ const Auth = () => {
           <img src={imgUrl} alt="" />
         </FormContainerImage>
         <Form onSubmit={handleSubmit}>
-          <Heading>{isLogin ? 'Sign in ' : 'Create your account'}</Heading>
+          <Heading>{isLogin ? "Sign in " : "Create your account"}</Heading>
+          {!isLogin && (
+            <Imagesection>
+              <ImageChoose onClick={() => imageRef.current.click()}>
+                {selectedFile ? selectedFile.name : ``}
+                <input
+                  type="file"
+                  hidden
+                  ref={imageRef}
+                  onChange={handleImageChange}
+                />
+              </ImageChoose>
+              <p>Profile</p>
+            </Imagesection>
+          )}
           {!isLogin && (
             <div>
               <Input
@@ -269,32 +291,21 @@ const Auth = () => {
               />
             </div>
           )}
-          {/* {!isLogin && (
-            <ImageChoose onClick={() => imageRef.current.click()}>
-              {selectedFile ? selectedFile.name : `Choose your pass image`}
-              <input
-                type="file"
-                hidden
-                ref={imageRef}
-                onChange={handleImageChange}
-              />
-            </ImageChoose>
-          )} */}
           <Button type="submit" disabled={loading} onClick={handleSubmit}>
-            {loading ? <Loader /> : isLogin ? 'Login' : 'Register'}
+            {loading ? <Loader /> : isLogin ? "Login" : "Register"}
           </Button>
           <StyledLink
             onClick={() => setIsLogin(!isLogin)}
             style={{
-              fontSize: '0.875rem',
-              color: 'var(--text-message)',
-              marginTop: '0.5rem',
-              display: 'inline-block',
+              fontSize: "0.875rem",
+              color: "var(--text-message)",
+              marginTop: "0.5rem",
+              display: "inline-block",
             }}
           >
             {isLogin
               ? "Don't have an account? Register Now"
-              : 'Already existing member ? Login'}
+              : "Already existing member ? Login"}
           </StyledLink>
         </Form>
       </FormContainer>

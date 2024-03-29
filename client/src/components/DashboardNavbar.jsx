@@ -12,7 +12,7 @@ const DashboardNavbar = () => {
 
   const handleLogout = () => {
     logoutUser();
-    setTimeout(() => navigate('/auth'), 0);
+    setTimeout(() => navigate('/'), 100);
     toast.success('Logged out successfully');
   };
 
