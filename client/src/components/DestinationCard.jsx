@@ -1,12 +1,12 @@
 /* eslint-disable no-async-promise-executor */
 /* eslint-disable react/prop-types */
-import styled from 'styled-components';
-import Loader from './Loader';
-import { toast } from 'react-toastify';
-import { useAppContext } from '../context/AppContext';
-import { useNavigate } from 'react-router-dom';
-import { loadStripe } from '@stripe/stripe-js';
-import { useState } from 'react';
+import styled from "styled-components";
+import Loader from "./Loader";
+import { toast } from "react-toastify";
+import { useAppContext } from "../context/AppContext";
+import { useNavigate } from "react-router-dom";
+import { loadStripe } from "@stripe/stripe-js";
+import { useState } from "react";
 
 const CardContainer = styled.div`
   margin-top: 10px;
@@ -49,7 +49,25 @@ const ServiceProviderDetails = styled.div`
     margin-top: 1rem;
   }
 `;
-
+const JourneyCardDescription = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background-color: #ffffff;
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
+  padding: 16px 20px;
+  color: #676f82;
+  border-radius: 6px;
+`;
+const JourneyCardTitle = styled.div`
+  text-transform: capitalize;
+  font-size: 16px;
+`;
+const JourneyCardDetails = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  color: #676f82;
+  gap: 1rem;
+`;
 const Wrapper = styled.div`
   /* styles.css */
   .popup-modal {
@@ -109,8 +127,8 @@ const DestinationCard = ({ allBuses }) => {
 
   const buyWithCrypto = async (busId, busPrice) => {
     if (!authUser) {
-      setTimeout(() => navigate('/auth'), 500);
-      toast.error('Please login first');
+      setTimeout(() => navigate("/auth"), 500);
+      toast.error("Please login first");
       return false;
     }
     setSelectedBus(busId);
@@ -125,7 +143,7 @@ const DestinationCard = ({ allBuses }) => {
       setPrice(btcAmount.toFixed(8));
       setShowQR(true);
     } catch (error) {
-      console.error('Error fetching BTC price:', error);
+      console.error("Error fetching BTC price:", error);
     }
   };
   const closeQRModal = () => {
@@ -136,14 +154,14 @@ const DestinationCard = ({ allBuses }) => {
     e.preventDefault();
     try {
       // Show loading toast
-      const loadingToast = toast.loading('Processing payment...');
-      const token = JSON.parse(localStorage.getItem('buspass')).token;
+      const loadingToast = toast.loading("Processing payment...");
+      const token = JSON.parse(localStorage.getItem("buspass")).token;
       const res = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/api/user/book-crypto`,
         {
-          method: 'post',
+          method: "post",
           headers: {
-            'Content-type': 'application/json',
+            "Content-type": "application/json",
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
@@ -176,34 +194,34 @@ const DestinationCard = ({ allBuses }) => {
       ]);
 
       if (result.success) {
-        toast.success('Payment successful');
+        toast.success("Payment successful");
         setShowQR(false);
-        setTimeout(() => navigate('/auth'), 500);
+        setTimeout(() => navigate("/auth"), 500);
       } else {
-        toast.error('Payment error');
+        toast.error("Payment error");
       }
     } catch (error) {
-      console.error('Error:', error);
-      toast.error('An error occurred while processing payment');
+      console.error("Error:", error);
+      toast.error("An error occurred while processing payment");
     }
   };
 
   const buyWithCard = async (busId) => {
     if (!authUser) {
-      setTimeout(() => navigate('/auth'), 500);
-      toast.error('Please login first');
+      setTimeout(() => navigate("/auth"), 500);
+      toast.error("Please login first");
       return false;
     }
     try {
       const stripe_key = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
       const stripe = await loadStripe(stripe_key);
-      const token = JSON.parse(localStorage.getItem('buspass')).token;
+      const token = JSON.parse(localStorage.getItem("buspass")).token;
       const res = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/api/user/book`,
         {
-          method: 'post',
+          method: "post",
           headers: {
-            'Content-type': 'application/json',
+            "Content-type": "application/json",
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
@@ -221,7 +239,7 @@ const DestinationCard = ({ allBuses }) => {
         console.log(result.error);
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
@@ -247,44 +265,54 @@ const DestinationCard = ({ allBuses }) => {
               </div>
             </div>
           )}
+          <JourneyCardDescription>
+            <JourneyCardTitle>Service Provider</JourneyCardTitle>
+            <JourneyCardDetails>
+              <p>Dep Time</p>
+              <p>Arr time</p>
+              <p>Fare</p>
+            </JourneyCardDetails>
+          </JourneyCardDescription>
           {buses.map((item) => {
             return (
-              <CardContainer key={item?._id}>
-                <ServiceProvider>
-                  <p>{item?.name}</p>
-                  <p>
-                    <span>Route : </span>
-                    {`${item?.from} to ${item?.to}`}
-                  </p>
-                  <p>
-                    <span>Boarding Point : </span>
-                    {item?.boardingPoint}
-                  </p>
-                </ServiceProvider>
-                <ServiceProviderDetails>
-                  <p>{item?.departureTime}</p>
-                  <p>{item?.arrivalTime}</p>
-                  <p>
-                    {item?.price}
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        buyWithCard(item._id);
-                      }}
-                    >
-                      Buy with Card
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        buyWithCrypto(item._id, item.price);
-                      }}
-                    >
-                      Buy with Crypto
-                    </button>
-                  </p>
-                </ServiceProviderDetails>
-              </CardContainer>
+              <>
+                <CardContainer key={item?._id}>
+                  <ServiceProvider>
+                    <p>{item?.name}</p>
+                    <p>
+                      <span>Route : </span>
+                      {`${item?.from} to ${item?.to}`}
+                    </p>
+                    <p>
+                      <span>Boarding Point : </span>
+                      {item?.boardingPoint}
+                    </p>
+                  </ServiceProvider>
+                  <ServiceProviderDetails>
+                    <p>{item?.departureTime}</p>
+                    <p>{item?.arrivalTime}</p>
+                    <p>
+                      {`₹ ${item?.price}`}
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          buyWithCard(item._id);
+                        }}
+                      >
+                        Buy with Card
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          buyWithCrypto(item._id, item.price);
+                        }}
+                      >
+                        Buy with Crypto
+                      </button>
+                    </p>
+                  </ServiceProviderDetails>
+                </CardContainer>
+              </>
             );
           })}
         </form>
